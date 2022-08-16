@@ -1,12 +1,13 @@
 import { FC } from 'react';
-import LoginScreen from './components/LoginScreen';
+import RegisterScreen from './components/RegisterScreen';
 import 'antd/dist/antd.min.css';
-
+import { ethers } from "ethers";
+import "./styles.css"
 
 const App: FC = () => {
   return (
     <div className="App">
-     <LoginScreen />
+     <RegisterScreen />
     </div>
   );
 }

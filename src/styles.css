@@ -1,0 +1,32 @@
+
+.App {
+    background-color: #F0F2F5;
+    position:fixed;
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+
+}
+
+.master-img {
+    padding-top: 10%;
+    height: 100vh;
+}
+#register-btn{
+    
+    width: 275px;
+    height: 125px;
+    
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    color: #FFFFFF;
+    
+    background: #40A9FF;
+    border-radius: 2px;
+}
