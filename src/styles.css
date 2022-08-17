@@ -13,10 +13,51 @@
 
 }
 
+.child-header {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.child-text {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.std-button {
+    width: 100px;
+    height: 50px;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6.4px 15px;
+    gap: 10px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+
+    color: #FFFFFF;
+    background: #1890FF;
+    border-radius: 2px;
+}
+
 .master-img {
     padding-top: 10%;
     height: 100vh;
 }
+
 #register-btn{
     
     width: 275px;
