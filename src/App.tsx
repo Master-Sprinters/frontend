@@ -4,11 +4,12 @@ import ChildWithdrawMoney from './components/ChildWithdrawMoney';
 import 'antd/dist/antd.min.css';
 import { ethers } from "ethers";
 import "./styles.css"
+import AdminScreen from './components/AdminScreen';
 
 const App: FC = () => {
   return (
     <div className="App">
-     <ChildWithdrawMoney />
+     <AdminScreen />
     </div>
   );
 }
