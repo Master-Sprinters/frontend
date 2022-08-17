@@ -5,11 +5,12 @@ import 'antd/dist/antd.min.css';
 import { ethers } from "ethers";
 import "./styles.css"
 import AdminScreen from './components/AdminScreen';
+import Parent from './components/ParentSecreen';
 
 const App: FC = () => {
   return (
     <div className="App">
-     <AdminScreen />
+     <Parent />
     </div>
   );
 }
