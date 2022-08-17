@@ -11,11 +11,11 @@ const RegisterScreen: FC = () => {
   const [username, setUserName] = useState<string>("")
   const [showLoginBtn, setShowLoginBtn] = useState(true)
 
-
+  
   const handleRegister = async () => {
     console.log(username)
     //@ts-ignore
-    if (window.etherum !== "undefined") { //check if metamask is installed
+    if (typeof window.ethereum !== 'undefined') { //check if metamask is installed
       //@ts-ignore
       const provider = new ethers.providers.Web3Provider(window.ethereum)
       await provider.send("eth_requestAccounts", []);
