@@ -6,11 +6,14 @@ import { Col, Row } from 'antd';
 import "../styles.css"
 import { ethers } from "ethers";
 
-const RegisterScreen: FC = () => {
+type Props = {
+  username: string;
+  setUserName: (username: string) => void;
+}
 
-  const [username, setUserName] = useState<string>("")
+const RegisterScreen: FC<Props> = ({username, setUserName}) => {
+
   const [showLoginBtn, setShowLoginBtn] = useState(true)
-
   
   const handleRegister = async () => {
     console.log(username)
@@ -27,7 +30,7 @@ const RegisterScreen: FC = () => {
 
   const handleLogin = () => {
     console.log("User Logged In")
-    //if user is registered before, navigate to home page
+    //if user is registered before, navigate to home page according to the user role
     //else
     setShowLoginBtn(false)
   }
