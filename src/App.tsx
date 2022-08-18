@@ -6,11 +6,11 @@ import { ethers } from "ethers";
 import "./styles.css"
 import AdminScreen from './components/AdminScreen';
 import Parent from './components/ParentSecreen';
-
+import Money from './components/Money';
 const App: FC = () => {
   return (
     <div className="App">
-     <Parent />
+     < Money/>
     </div>
   );
 }
