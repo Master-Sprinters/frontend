@@ -86,9 +86,6 @@ import {
       dueDate: new Date(),
     },
   ];
-  
-  
-  
  
   const { Content, Sider } = Layout;
   const onChangeChild: TableProps<ChildDataType>['onChange'] = (pagination, sorter, extra) => {
@@ -111,12 +108,12 @@ import {
   }
   const items: MenuItem[] = [
     getItem('Ana Menü', '1', <TeamOutlined />),
-    getItem('Görüntüle\Değişiklik yap', '2', <TeamOutlined />),
+    getItem('Görüntüle/Değişiklik yap', '2', <TeamOutlined />),
     getItem('Cocuk Ekle Ve Para Yatır', '3', <TeamOutlined />),
     getItem('Çıkış', '4', < LogoutOutlined />),
   ];
   
-  const Parent: FC = () => {
+  const ParentScreen: FC = () => {
   
     const [currentScreen, setCurrentScreen] = useState("parent")
     const [collapsed, setCollapsed] = useState(false);
@@ -165,8 +162,4 @@ import {
       </>
     );
   }
-export default Parent;
-
-function handleDisplay() {
-    throw new Error('Function not implemented.');
-}
+export default ParentScreen;
