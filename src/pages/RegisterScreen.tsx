@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MasterPicture from "./Master.jpeg"
+import MasterPicture from "../components/Master.jpeg"
 import { Button, Input, Form } from 'antd';
 import { FC } from "react";
 import { Col, Row } from 'antd';

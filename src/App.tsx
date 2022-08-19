@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
-import RegisterScreen from './components/RegisterScreen';
-import ChildWithdrawMoney from './components/ChildWithdrawMoney';
+import RegisterScreen from './pages/RegisterScreen';
+import ChildScreen from './pages/ChildScreen';
 import 'antd/dist/antd.min.css';
 import { ethers } from "ethers";
 import "./styles.css"
-import AdminScreen from './components/AdminScreen';
-import ParentScreen from './components/ParentScreen';
+import AdminScreen from './pages/AdminScreen';
+import ParentScreen from './pages/ParentScreen';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Money from './components/Money';
 import ChildAdd from './components/ChildAdd';
@@ -23,9 +23,8 @@ const App: FC = () => {
             <Route path="register-screen" element={<RegisterScreen username={username} setUserName={setUserName}/>} />
             <Route path="admin-screen" element={<AdminScreen />} />
             <Route path="parent-screen" element={<ParentScreen />} />
-            <Route path="child-screen" element={<ChildWithdrawMoney />} />
+            <Route path="child-screen" element={<ChildScreen />} />
             <Route path="deposit-screen" element={<Money />} />
-            <Route path="childadd-screen" element={<ChildAdd/>} />
         </Routes>
       </div>
     </BrowserRouter>

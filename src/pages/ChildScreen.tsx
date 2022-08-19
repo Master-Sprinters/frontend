@@ -3,7 +3,7 @@ import {FC} from "react";
 import {Button} from "antd";
 import {Row, Col, Space} from "antd";
 
-const ChildWithdrawMoney: FC = () => {
+const ChildScreen: FC = () => {
 
     const [name, setName] = useState<string>("Kaan Can")
     const [surname, setSurname] = useState<string>("Bozdoğan")
@@ -48,4 +48,4 @@ const ChildWithdrawMoney: FC = () => {
 
 }
 
-export default ChildWithdrawMoney;
+export default ChildScreen;

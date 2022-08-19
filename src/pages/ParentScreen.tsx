@@ -8,6 +8,7 @@ import {
   TeamOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
+import ChildAdd from '../components/ChildAdd';
 
 
   interface ChildDataType {
@@ -115,21 +116,24 @@ import {
   
   const ParentScreen: FC = () => {
   
-    const [currentScreen, setCurrentScreen] = useState("parent")
+    const [currentScreen, setCurrentScreen] = useState<JSX.Element[]>()
     const [collapsed, setCollapsed] = useState(false);
   
     const handleCurrentScreen = (e: MenuItem) => {
       console.log(e?.key)
-      if (e?.key === '1') {
-        setCurrentScreen("parent")
-      } else if (e?.key === '2') {
-        setCurrentScreen("child")
+      if (e?.key === '2') {
+        setCurrentScreen(childAddDepositForm)
+      } else if (e?.key === '3') {
+        setCurrentScreen(childTable)
       }
     }
-  
-    const handleDisplay = () => {
-  
-      let currentTable = [ //child table
+    
+    const childAddDepositForm: JSX.Element[] = [
+        <ChildAdd key={1} />
+    ]
+
+    const childTable: JSX.Element[] = [
+
         <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
           <h5 id="parent-table-title">Çocuklar Tablosu</h5>
           <Table
@@ -140,26 +144,20 @@ import {
             onChange={onChangeChild}
           />
         </div>
-      ]
-      return ( //return child table
-        <Layout style={{ minHeight: '100vh' }}>
+    ]
+  
+    return (
+      <Layout style={{ minHeight: '100vh' }}>
           <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
             <div className="logo" />
             <Menu onClick={handleCurrentScreen} theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
           </Sider>
           <Layout className="site-layout">
             <Content style={{ margin: '0 16px' }}>
-              {currentTable}
+              {currentScreen}
             </Content>
           </Layout>
         </Layout>
-      )
-    }
-  
-    return (
-      <>
-        {handleDisplay()}
-      </>
     );
   }
 export default ParentScreen;
