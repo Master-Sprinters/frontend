@@ -1,7 +1,4 @@
 import React, {useState} from "react";
-import {FC} from "react";
-import {Button} from "antd";
-import {Row, Col, Popconfirm, message} from "antd";
 import WithdrawMoney from '../components/WithdrawMoney'
 
 

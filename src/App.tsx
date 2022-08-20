@@ -7,8 +7,6 @@ import "./styles.css"
 import AdminScreen from './pages/AdminScreen';
 import ParentScreen from './pages/ParentScreen';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Money from './components/Money';
-import ChildAdd from './components/ChildAdd';
 
 const App: FC = () => {
 
@@ -24,7 +22,6 @@ const App: FC = () => {
             <Route path="admin-screen" element={<AdminScreen />} />
             <Route path="parent-screen" element={<ParentScreen />} />
             <Route path="child-screen" element={<ChildScreen />} />
-            <Route path="deposit-screen" element={<Money />} />
         </Routes>
       </div>
     </BrowserRouter>

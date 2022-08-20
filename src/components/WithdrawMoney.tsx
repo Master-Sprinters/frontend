@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {FunctionComponent} from "react";
-import {Button, Form, InputNumber, Space, DatePicker} from "antd";
-import {Row, Col, Popconfirm, message, Input, Select} from "antd";
+import {Button, Form, InputNumber, DatePicker} from "antd";
+import {Row, message} from "antd";
 import moment from "moment";
 import "../styles.css"
 
@@ -32,10 +32,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _surname, _accId, _tra
     const returnRow = (leftStr: string, rightStr: string) => {
         return (
             <Form.Item
+                key={leftStr}
                 label={leftStr}
-                name="amount"
                 labelAlign="right"
                 className="child-text"
+                style={{font:"inherit", fontSize:"inherit"}}
             >
                 {rightStr}
             </Form.Item>
@@ -88,9 +89,9 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _surname, _accId, _tra
     return (
         <div>
             {_isParentAcc && 
-                <div>
+                <div key="parent">
                     <Row justify="center" className="child-header" style={{paddingTop: "75px", paddingBottom: "50px"}}>
-                        Varlık ve Devir Tarihini Düzenle
+                        <h5 id="edit-assets-title">Varlık ve Devir Tarihini Düzenle </h5>
                     </Row>
 
                     <Form {...fromLayout}
@@ -123,7 +124,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _surname, _accId, _tra
                             labelAlign="right"
                         >
                             <DatePicker format={dateFormatList} style={{width: "150px"}}
-                                    defaultValue={moment(transferDate, dateFormatList)}
+                                    value={moment(transferDate, dateFormatList)}
                                     allowClear={false}
                                 />
                         </Form.Item>
@@ -145,7 +146,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _surname, _accId, _tra
             }
             
             {!_isParentAcc &&
-                <div>
+                <div key="child">
                     <Row justify="center" className="child-header" style={{paddingTop: "75px", paddingBottom: "50px"}}>
                         Para Çek
                     </Row>
