@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import 'antd/dist/antd.min.css';
 import "../styles.css"
 import { Table } from 'antd';
@@ -11,6 +11,7 @@ import {
 import ChildAdd from '../components/ChildAdd';
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
 import WithdrawMoney from '../components/WithdrawMoney';
+import { useNavigate } from 'react-router-dom';
 
   interface ChildDataType {
     key: React.Key;
@@ -20,9 +21,37 @@ import WithdrawMoney from '../components/WithdrawMoney';
     dueDate: string;
   } 
   
-  const ParentScreen: FC = () => {
+  type Props = {
+    userRole: number;
+    connectProvider: () => void;
+  }
+
+  const ParentScreen: FC<Props> = ( {userRole, connectProvider }) => {
           
     const [currentScreen, setCurrentScreen] = useState<JSX.Element[]>([])
+    const navigate = useNavigate()
+
+
+    useEffect(() => {
+      //direct the user to login page if adress changes
+  
+     //@ts-ignore
+      const metaMaskProvider = window.ethereum
+      if (metaMaskProvider) {
+        metaMaskProvider.on("accountsChanged", () => {
+          connectProvider()
+          navigate("/")
+          window.location.reload();
+  
+        });
+      }
+      if(userRole !== 1){//redirect to login page if role is not parent
+          navigate("/")
+          window.location.reload();
+          console.log(userRole)
+      }
+      console.log(userRole)
+    });
 
     const childColumns: ColumnsType<ChildDataType> = [
       {

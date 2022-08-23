@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import 'antd/dist/antd.min.css';
 import "../styles.css"
 import { Space, Table } from 'antd';
@@ -9,6 +9,13 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
+import { Navigate, useNavigate } from 'react-router-dom';
+
+type Props = {
+  userRole: number;
+  address: string;
+  connectProvider: () => void;
+}
 
 interface DataType {
   key: React.Key;
@@ -25,7 +32,29 @@ interface ChildDataType {
   dueDate: Date;
 }
 
-const AdminScreen: FC = () => {
+const AdminScreen: FC<Props> = ({ userRole, address, connectProvider }) => {
+
+  const navigate = useNavigate()
+    
+  useEffect(() => {
+    //direct the user to login page if adress changes
+
+   //@ts-ignore
+    const metaMaskProvider = window.ethereum
+    if (metaMaskProvider) {
+      metaMaskProvider.on("accountsChanged", () => {
+        connectProvider()
+        navigate("/")
+        window.location.reload();
+
+      });
+    }
+    if(userRole !== 0){//redirect to login page if role is not admin
+        navigate("/")
+        window.location.reload();
+    }
+    console.log(address)
+  });
 
   const childColumns: ColumnsType<ChildDataType> = [
     {
@@ -109,7 +138,7 @@ const AdminScreen: FC = () => {
       key: 'action',
       render: (row) => (
         <Space size="middle">
-          <a onClick={()=> displayChildContent(row)}>Çocukları Görüntüle</a>
+          <a onClick={() => displayChildContent(row)}>Çocukları Görüntüle</a>
         </Space>
       ),
     },
@@ -154,17 +183,17 @@ const AdminScreen: FC = () => {
     getItem('Çıkış', '2', <LogoutOutlined />),
   ];
 
-  const parentTable:JSX.Element[] = [
+  const parentTable: JSX.Element[] = [
     <div key={1} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-        <h5 id="parent-table-title">Ebeveynler Tablosu</h5>
-        <Table
-          rowKey='key'
-          style={{ width: "80%", textAlign: "center", paddingLeft: "20%" }}
-          columns={columns}
-          dataSource={data}
-          onChange={onChange}
-        />
-      </div>
+      <h5 id="parent-table-title">Ebeveynler Tablosu</h5>
+      <Table
+        rowKey='key'
+        style={{ width: "80%", textAlign: "center", paddingLeft: "20%" }}
+        columns={columns}
+        dataSource={data}
+        onChange={onChange}
+      />
+    </div>
 
   ]
 
@@ -189,7 +218,7 @@ const AdminScreen: FC = () => {
         onChange={onChangeChild}
       />
     </div>
-    ]
+  ]
 
   //called when user clicks 'display children'
   const displayChildContent = (row: any) => {
