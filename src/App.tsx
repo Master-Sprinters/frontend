@@ -25,6 +25,7 @@ const App: FC = () => {
       const signer = provider.getSigner()
       const address = await signer.getAddress()
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer)
+      
       const role = await contract.getRole(address)
 
       console.log(role)

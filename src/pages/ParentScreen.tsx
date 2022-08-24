@@ -12,7 +12,6 @@ import ChildAdd from '../components/ChildAdd';
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
 import WithdrawMoney from '../components/WithdrawMoney';
 import { useNavigate } from 'react-router-dom';
-import { Contract } from 'ethers';
 import { ethers } from 'ethers';
 
   interface ChildDataType {
@@ -25,15 +24,30 @@ import { ethers } from 'ethers';
   
   type Props = {
     userRole: number;
-    connectProvider: () => void;
+    connectProvider: () => Promise<{
+      role: any;
+      address: string;
+      contract: ethers.Contract;
+    } | undefined>;
     contract: ethers.Contract | undefined;
   }
 
   const ParentScreen: FC<Props> = ( {userRole, connectProvider, contract }) => {
           
     const [currentScreen, setCurrentScreen] = useState<JSX.Element[]>([])
-    const navigate = useNavigate()
+    let currentChildren: ChildDataType[] = []
 
+    const navigate = useNavigate()
+    const redirectUser = async () => {
+
+      if (typeof contract === 'undefined') {
+        connectProvider().then((res) => {if (res?.role !== 1) {//redirect to login page if role is not parent
+          navigate("/")
+        }})
+
+      }
+  
+    }
 
     useEffect(() => {
       //direct the user to login page if adress changes
@@ -48,12 +62,7 @@ import { ethers } from 'ethers';
   
         });
       }
-      if(userRole !== 1){//redirect to login page if role is not parent
-          navigate("/")
-          window.location.reload();
-          console.log(userRole)
-      }
-      console.log(userRole)
+      redirectUser()
     });
 
     const childColumns: ColumnsType<ChildDataType> = [
@@ -93,37 +102,6 @@ import { ethers } from 'ethers';
           render: (row) => <a onClick={()=> displayEditContent(row)} >Varlık ve Tarihi Düzenle</a>,
         },
     ];
-    
-    const childData = [
-      {
-        key: '1',
-        name: 'John Brown',
-        accountID: 32,
-        amount: 22,
-        dueDate: new Date().toDateString(),
-      },
-      {
-        key: '2',
-        name: 'Jim Green',
-        accountID: 42,
-        amount: 22,
-        dueDate: new Date().toDateString(),
-      },
-      {
-        key: '3',
-        name: 'Joe Black',
-        accountID: 52,
-        amount: 22,
-        dueDate: new Date().toDateString(),
-      },
-      {
-        key: '4',
-        name: 'Jim Red',
-        accountID: 62,
-        amount: 22,
-        dueDate: new Date().toDateString(),
-      },
-    ];
    
     const onChangeChildTable: TableProps<ChildDataType>['onChange'] = (pagination, sorter, extra) => {
       console.log('params', pagination, sorter, extra);
@@ -132,20 +110,56 @@ import { ethers } from 'ethers';
     const childAddDepositForm: JSX.Element[] = [
         <ChildAdd key={1} contract={contract} />
     ]
+    const displayChildTable = (tableData: ChildDataType[]) => {
 
-    const childTable: JSX.Element[] = [
-
-        <div key={2} className="site-layout-background" style={{ minHeight: 360 }}>
+      const currentChildContent = [
+        <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
           <h5 id="parent-table-title">Çocuklar Tablosu</h5>
           <Table
             rowKey='key'
-            style={{ width: "80%", textAlign: "center", paddingLeft: "20%" }}
+            style={{ textAlign: "center" }}
             columns={childColumns}
-            dataSource={childData}
+            dataSource={tableData}
             onChange={onChangeChildTable}
           />
         </div>
-    ]
+      ]
+      setCurrentScreen(currentChildContent)
+    }
+
+    const assignChildren = (childrenData:any) => {
+
+      for (let i = 0; i < childrenData.length; i++) {
+        const element: ChildDataType = {
+          key: i,
+          name: childrenData[i][1].concat(" ").concat(childrenData[i][2]),
+          accountID: childrenData[i][0],
+          amount: Number(childrenData[i][4].toHexString())/(Math.pow(10,18)),
+          dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
+        }
+  
+        currentChildren.push(element)
+        console.log(element.dueDate)
+      }
+      //setData(currentParents)
+      displayChildTable(currentChildren)
+    }
+
+    const connectChildren = async () => {
+
+      let childrenRes
+        connectProvider().then(async (res) => {
+          childrenRes = await res?.contract.getChildrenAsParent()
+          assignChildren(childrenRes)
+        })
+      
+    }
+  
+    useEffect(() => {
+      //Runs only on the first render, calls parent table from backend
+      connectChildren()
+  
+    }, []);
 
     const menuItems: MenuItem[] = [
       getItem('Ana Menü', '1', <TeamOutlined />),
@@ -166,9 +180,11 @@ import { ethers } from 'ethers';
     const handleCurrentContent = (e: MenuItem) => {
       console.log(e?.key)
       if (e?.key === '2') {
-        setCurrentScreen(childTable)
+        connectChildren()
       } else if (e?.key === '3') {
         setCurrentScreen(childAddDepositForm)
+      } else if(e?.key === '4'){
+        navigate("/")
       }
     }
 

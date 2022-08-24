@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 type Props = {
   address: string;
@@ -33,7 +33,7 @@ interface ChildDataType {
   name: string;
   accountID: number;
   amount: number;
-  dueDate: Date;
+  dueDate: string;
 }
 
 const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
@@ -95,38 +95,7 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
       dataIndex: 'dueDate',
       key: 'dueDate',
       defaultSortOrder: 'descend',
-      sorter: (a, b) => a.dueDate.getFullYear() - b.dueDate.getFullYear(),
-    },
-  ];
-
-  const childData = [
-    {
-      key: '1',
-      name: 'John Brown',
-      accountID: 32,
-      amount: 22,
-      dueDate: new Date(),
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      accountID: 42,
-      amount: 22,
-      dueDate: new Date(),
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      accountID: 52,
-      amount: 22,
-      dueDate: new Date(),
-    },
-    {
-      key: '4',
-      name: 'Jim Red',
-      accountID: 62,
-      amount: 22,
-      dueDate: new Date(),
+      sorter: (a, b) => a.dueDate.length - b.dueDate.length,
     },
   ];
 
@@ -150,7 +119,7 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
       key: 'action',
       render: (row) => (
         <Space size="middle">
-          <a onClick={() => displayChildTable(row)}>Çocukları Görüntüle</a>
+          <a onClick={() => connectChildren(row)}>Çocukları Görüntüle</a>
         </Space>
       ),
     },
@@ -164,8 +133,8 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
   };
 
   let currentParents: ParentDataType[] = []
+  let currentChildren: ChildDataType[] = []
   let parentTable: JSX.Element[] = []
-  let childTable: JSX.Element[] = []
   const [data, setData] = useState<ParentDataType[]>()
   const [currentScreen, setCurrentScreen] = useState<JSX.Element[]>(parentTable)
 
@@ -188,10 +157,21 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
 
 
   //called when user clicks 'display children'
-  const displayChildTable = (row: any) => {
+  const displayChildTable = (tableData: ChildDataType[]) => {
 
+    const currentChildContent = [
+      <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+        <h5 id="parent-table-title">Çocuklar Tablosu</h5>
+        <Table
+          rowKey='key'
+          style={{ textAlign: "center" }}
+          columns={childColumns}
+          dataSource={tableData}
+          onChange={onChangeChild}
+        />
+      </div>
+    ]
     setCurrentScreen(currentChildContent)
-    console.log(row)
   }
 
   //assigns the given array parameter to current parents variable to be used
@@ -209,7 +189,26 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
     }
     setData(currentParents)
     displayParentTable(currentParents)
+  }
 
+  //assigns the given array parameter to current parents variable to be used
+  //on displayParentTable function 
+  const assignChildren = (childrenData:any) => {
+
+    for (let i = 0; i < childrenData.length; i++) {
+      const element: ChildDataType = {
+        key: i,
+        name: childrenData[i][1].concat(" ").concat(childrenData[i][2]),
+        accountID: childrenData[i][0],
+        amount: Number(childrenData[i][4].toHexString())/(Math.pow(10,18)),
+        dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
+      }
+
+      currentChildren.push(element)
+      console.log(element.dueDate)
+    }
+    //setData(currentParents)
+    displayChildTable(currentChildren)
   }
 
   //gets the parent list from backend and calls assign parents function with retrieved data
@@ -224,6 +223,22 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
       connectProvider().then(async (res) => {
         parentsRes = await res?.contract.getAllParents()
         assginParents(parentsRes)
+      })
+    }
+  }
+
+  //gets the child list from backend and calls assign getChildren function with retrieved data
+  const connectChildren = async (row:any) => {
+
+    let childrenRes
+
+    if (typeof contract !== 'undefined') {
+      childrenRes = await contract.getChildren(row.accountID)
+      assignChildren(childrenRes)
+    } else {
+      connectProvider().then(async (res) => {
+        childrenRes = await res?.contract.getChildren(row.accountID)
+        assignChildren(childrenRes)
       })
     }
   }
@@ -249,18 +264,6 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
       //exit
     }
   }
-  const currentChildContent = [
-    <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-      <h5 id="parent-table-title">Çocuklar Tablosu</h5>
-      <Table
-        rowKey='key'
-        style={{ width: "80%", textAlign: "center", paddingLeft: "20%" }}
-        columns={childColumns}
-        dataSource={childData}
-        onChange={onChangeChild}
-      />
-    </div>
-  ]
 
   return (
     <>
