@@ -31,14 +31,20 @@ const App: FC = () => {
       setUserRole(role)
       setCurrentAddress(address)
       setCurrentContract(contract)
+      return { role, address, contract }
     }
   }
 
   useEffect(() => {
     //Runs only on the first render
-    connectProvider()
+    connectProvider().then((res) => {
+      setUserRole(res?.role)
+      //@ts-ignore
+      setCurrentAddress(res?.address)
+      setCurrentContract(res?.contract)
+    }
+    )
   }, []);
-
 
   return (
     <BrowserRouter>
@@ -48,22 +54,22 @@ const App: FC = () => {
             username={username}
             setUserName={setUserName}
             userRole={userRole}
-            connectProvider={connectProvider} 
-            contract={currentContract} 
-            address={currentAddress} 
-            setUserRole={setUserRole}/>} />
+            connectProvider={connectProvider}
+            contract={currentContract}
+            address={currentAddress}
+            setUserRole={setUserRole} />} />
           <Route path="register-screen" element={<RegisterScreen
             username={username}
             setUserName={setUserName}
             userRole={userRole}
-            connectProvider={connectProvider} 
-            contract={currentContract} 
-            address={currentAddress} 
+            connectProvider={connectProvider}
+            contract={currentContract}
+            address={currentAddress}
             setUserRole={setUserRole} />} />
           <Route path="admin-screen" element={<AdminScreen
-            userRole={userRole}
             address={currentAddress}
-            connectProvider={connectProvider} />} />
+            connectProvider={connectProvider}
+            contract={currentContract} />} />
           <Route path="parent-screen" element={<ParentScreen
             userRole={userRole}
             connectProvider={connectProvider} />} />

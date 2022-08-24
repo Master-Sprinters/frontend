@@ -62,8 +62,8 @@ const RegisterScreen: FC<Props> = ({ username, setUserName, userRole, connectPro
     }
   }
 
-  const handleLogin = () => {
-
+  const handleLogin = async () => {
+    
     switch (userRole) {
       case 0: { //admin
         navigate("/admin-screen")
