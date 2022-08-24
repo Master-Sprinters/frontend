@@ -12,6 +12,8 @@ import ChildAdd from '../components/ChildAdd';
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
 import WithdrawMoney from '../components/WithdrawMoney';
 import { useNavigate } from 'react-router-dom';
+import { Contract } from 'ethers';
+import { ethers } from 'ethers';
 
   interface ChildDataType {
     key: React.Key;
@@ -24,9 +26,10 @@ import { useNavigate } from 'react-router-dom';
   type Props = {
     userRole: number;
     connectProvider: () => void;
+    contract: ethers.Contract | undefined;
   }
 
-  const ParentScreen: FC<Props> = ( {userRole, connectProvider }) => {
+  const ParentScreen: FC<Props> = ( {userRole, connectProvider, contract }) => {
           
     const [currentScreen, setCurrentScreen] = useState<JSX.Element[]>([])
     const navigate = useNavigate()
@@ -127,7 +130,7 @@ import { useNavigate } from 'react-router-dom';
     }; 
 
     const childAddDepositForm: JSX.Element[] = [
-        <ChildAdd key={1} />
+        <ChildAdd key={1} contract={contract} />
     ]
 
     const childTable: JSX.Element[] = [

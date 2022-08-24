@@ -6,19 +6,45 @@ import {
   Input,
   InputNumber,
   Row,
+  message,
 } from 'antd';
 import React, { useState } from 'react';
 import { FC } from 'react';
+import { ethers } from "ethers";
 import 'antd/dist/antd.min.css';
 import "../styles.css"
 
-const ChildAdd: React.FC = () => {
+type Props = {
+  contract: ethers.Contract | undefined;
+}
+
+const ChildAdd: FC<Props> = ({contract}) => {
 
   const [childName, setChildName] = useState("")
+  const [childFirstName, setChildFirstName] = useState("")
+  const [childLastName, setChildLastName] = useState("")
   const [childAccount, setChildAccount] = useState("")
   const [deliverDate, setDeliverDate] = useState<Date>()
   const [deliverAmount, setDeliverAmount] = useState(0)
 
+  const handleChildAdd = async () => {
+    //splitting given input to get the name and surname
+    let userNameSplitted = childName.split(" ", 2);
+    let childFirstName = userNameSplitted[0]
+    let childLastName = userNameSplitted[1]
+    
+    if(typeof childName === 'undefined'){
+      message.error('Lütfen geçerli bir isim-soyisim giriniz...')
+      return
+    }
+    console.log()
+    if(typeof contract !== 'undefined'){
+      const res = await contract.addChild(childAccount, childFirstName, childLastName, deliverDate?.getTime(), { value: ethers.utils.parseEther(deliverAmount.toString()) })
+      const res2 = await res.wait()
+      console.log(res2)
+      console.log(deliverDate?.getTime())
+    }
+  }
 
   return (
     <>
@@ -30,6 +56,7 @@ const ChildAdd: React.FC = () => {
             wrapperCol={{ span: 14 }}
             layout="horizontal"
             size="large"
+            onFinish={handleChildAdd}
           >
             <Form.Item label="Ad Ve Soyad Giriz">
               <Input onChange={(e) => setChildName(e.target.value)} />
