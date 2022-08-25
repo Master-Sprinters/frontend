@@ -44,12 +44,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
     const [transferDate, setTransferDate] = useState<string>(_transferDate)
     const [budget, setBudget] = useState<string>(_budget)
 
-    const dateFormatList = ['MM/DD/YYYY'];
     const [leftRadioClicked, setleftRadioClicked] = useState<boolean>(true)
     const [clickedRadioColor, setClickedRadioColor] = useState<string>("#40A9FF")
 
     const [newBudget, setNewBudget] = useState<number>(0);
-    const [newDate, setNewDate] = useState<string>("")
+    const [newDate, setNewDate] = useState<Date>(new Date(2000))
 
     const { Option } = Select;
 
@@ -73,7 +72,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                 if (leftRadioClicked) {
                     if(typeof contract !== 'undefined'){
                         const addition = (parseInt(budget) + newBudget).toString()
-                        const sent = budget.toString()
                         const res = await contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
                         const res2 = await res.wait()
                         console.log(res2)
@@ -81,13 +79,23 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                     }
                 }
                 else {
+                    console.log("elsein içi")
                     if(typeof contract !== 'undefined'){
-                        const res = await contract.parentWithdraw(accId, ethers.utils.parseEther(budget))
+                        const subtraction = (parseInt(budget) + (-1 * newBudget)).toString()
+                        const res = await contract.parentWithdraw(accId, ethers.utils.parseEther(newBudget.toString()))
                         const res2 = await res.wait()
                         console.log(res2)
-                        setBudget((parseInt(budget) + (-1 * newBudget)).toString())
+                        setBudget(subtraction)
                     }
                 }
+
+                if(typeof contract !== 'undefined'){
+                    console.log("Changing date")
+                    const res = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime() / 1000)))
+                    const res2 = await res.wait()
+                    console.log(res2)
+                }
+
                 displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
             }
             else {
@@ -99,7 +107,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
         }
     }
 
-    const onClickWithdraw = () => {
+    const onClickWithdraw = async () => {
         console.log("save button clicked")
 
         if (window.confirm('Varlığı hesabınıza çekmek istediğinize emin misiniz?')) {
@@ -107,8 +115,13 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
             setBudget("0")
             
             //back-end com
+            if(typeof contract !== 'undefined'){
+                const res = await contract.childWithdraw()
+                const res2 = await res.wait()
+                console.log(res2)
+            }
 
-            displaySaveSuccesNotification('bottomRight', 'Para hesabınıza çekildi')
+            displaySaveSuccesNotification('bottomRight', 'Para çekildi')
 
         }
         else {
@@ -124,7 +137,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
 
     const onDateChange = (e: any, dateString: string) => {
         console.log(dateString)
-        setNewDate(dateString)
+        setNewDate(new Date(dateString))
     }
 
     const formLayout = {
@@ -194,7 +207,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                     <div>
                         <Form.Item
                             label={<div className="child-left-text"> Yeni Miktar : </div>}
-                            rules={[{ required: true, message: 'Lütfen miktarı giriniz.' }]}
+                            rules={[{ required: false, message: 'Lütfen miktarı giriniz.' }]}
                             labelAlign="right"
                         >
                             <Col>
@@ -235,8 +248,8 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                             label={<div className="child-left-text"> Yeni Devir Tarihi : </div>}
                             labelAlign="right"
                         >
-                            <DatePicker id="transfer-date" format={dateFormatList}
-                                defaultValue={moment(transferDate, dateFormatList)}
+                            <DatePicker id="transfer-date"
+                                defaultValue={moment(transferDate)}
                                 allowClear={false} style={{width: "140px"}}
                                 onChange={(e: any, dateString: string) => onDateChange(e,dateString)}
                             />

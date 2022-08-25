@@ -7,15 +7,24 @@ type Props = {
     userRole: number;
     connectProvider: () => void;
     contract: ethers.Contract | undefined;
-  }
+}
+
+interface ChildDataType {
+  key: React.Key;
+  name: string;
+  surname: string;
+  accountID: number;
+  amount: number;
+  dueDate: string;
+}
 
 const ChildScreen:FC<Props> = ( {userRole, connectProvider, contract}) => {
 
-    const [name, setName] = useState<string>("Kaan Can")
-    const [surname, setSurname] = useState<string>("Bozdoğan")
-    const [accId, setAccId] = useState<string>("161044070")
-    const [transferDate, setTransferDate] = useState<string>("13/05/2025")
-    const [budget, setBudget] = useState<string>("123 ETH")
+    const [name, setName] = useState<string>("")
+    const [surname, setSurname] = useState<string>("")
+    const [accId, setAccId] = useState<string>("")
+    const [transferDate, setTransferDate] = useState("")
+    const [budget, setBudget] = useState<string>("")
 
     const navigate = useNavigate()
 
@@ -37,7 +46,20 @@ const ChildScreen:FC<Props> = ( {userRole, connectProvider, contract}) => {
             navigate("/")
             window.location.reload();
         }
+
+        getChildInfo();
       });
+
+      const getChildInfo = async () => {
+        if(typeof contract !== 'undefined'){
+          const res = await contract.getChild()
+          console.log(res)
+
+          setName(res.name);
+        }
+      };
+
+
 
     return (
         <WithdrawMoney _isParentAcc={false} _name={name} _accId={accId} _transferDate={transferDate} _budget={budget} contract={contract}/>

@@ -24,7 +24,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
 
   const [childName, setChildName] = useState("")
   const [childAccount, setChildAccount] = useState("")
-  const [deliverDate, setDeliverDate] = useState<Date>()
+  const [deliverDate, setDeliverDate] = useState<Date>(new Date(2000))
   const [deliverAmount, setDeliverAmount] = useState(0)
 
   const text = "İşlemi onaylıyor musunuz?"
@@ -46,10 +46,10 @@ const ChildAdd: FC<Props> = ({ contract }) => {
       return
     }
     if (typeof contract !== 'undefined') {
-      const res = await contract.addChild(childAccount, childFirstName, childLastName, deliverDate?.getTime(), { value: ethers.utils.parseEther(deliverAmount.toString()) })
+      const res = await contract.addChild(childAccount, childFirstName, childLastName, (Math.floor(deliverDate?.getTime() / 1000)), { value: ethers.utils.parseEther(deliverAmount.toString()) })
       const res2 = await res.wait()
       console.log(res2)
-      console.log(deliverDate?.getTime())
+      console.log(Math.floor(deliverDate?.getTime() / 1000))
       if(res2 !== 'undefined'){
         displaySuccesNotification('bottomRight')
       }
@@ -81,7 +81,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
             <Form.Item label="Devredilicek Tarih"
               rules={[{ required: true, message: 'Geçerli bir devir tarihi giriniz' }]}
             >
-              <DatePicker onChange={(e) => setDeliverDate(e?.toDate())} />
+              <DatePicker onChange={(e) => setDeliverDate(e!.toDate())} />
             </Form.Item >
             <Form.Item label="Devredilicek Miktar"
             rules={[{ required: true, message: 'Devredilecek miktarı giriniz' }]}
