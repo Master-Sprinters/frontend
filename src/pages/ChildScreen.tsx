@@ -38,7 +38,7 @@ const ChildScreen:FC<Props> = ( {userRole, connectProvider }) => {
       });
       
     return (
-        <WithdrawMoney _isParentAcc={false} _name={name} _surname={surname} _accId={accId} _transferDate={transferDate} _budget={budget}/>
+        <WithdrawMoney _isParentAcc={false} _name={name} _accId={accId} _transferDate={transferDate} _budget={budget}/>
     )
 }
 
