@@ -150,6 +150,8 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
             columns={columns}
             dataSource={tableData}
             onChange={onChange}
+            size='small'
+            pagination={{pageSize: 4}}
           />
         </div>
       ])
@@ -168,6 +170,8 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
           columns={childColumns}
           dataSource={tableData}
           onChange={onChangeChild}
+          size='small'
+          pagination={{pageSize: 4}}
         />
       </div>
     ]
