@@ -1,3 +1,4 @@
+import { Contract, ethers } from "ethers";
 import React, {useEffect, useState, FC} from "react";
 import { useNavigate } from "react-router-dom";
 import WithdrawMoney from '../components/WithdrawMoney'
@@ -5,9 +6,10 @@ import WithdrawMoney from '../components/WithdrawMoney'
 type Props = {
     userRole: number;
     connectProvider: () => void;
+    contract: ethers.Contract | undefined;
   }
 
-const ChildScreen:FC<Props> = ( {userRole, connectProvider }) => {
+const ChildScreen:FC<Props> = ( {userRole, connectProvider, contract}) => {
 
     const [name, setName] = useState<string>("Kaan Can")
     const [surname, setSurname] = useState<string>("Bozdoğan")
@@ -38,7 +40,7 @@ const ChildScreen:FC<Props> = ( {userRole, connectProvider }) => {
       });
       
     return (
-        <WithdrawMoney _isParentAcc={false} _name={name} _accId={accId} _transferDate={transferDate} _budget={budget}/>
+        <WithdrawMoney _isParentAcc={false} _name={name} _accId={accId} _transferDate={transferDate} _budget={budget} contract={contract}/>
     )
 }
 

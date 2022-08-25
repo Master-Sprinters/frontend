@@ -171,7 +171,7 @@ import { ethers } from 'ethers';
     const displayEditContent = (row:any) => {
 
       const currentEditContent = [
-        <WithdrawMoney key={3} _isParentAcc={true} _name={row.name} _accId={row.accountID} _transferDate={row.dueDate} _budget={row.amount}/>
+        <WithdrawMoney key={3} _isParentAcc={true} _name={row.name} _accId={row.accountID} _transferDate={row.dueDate} _budget={row.amount} contract={contract}/>
       ]
       setCurrentScreen(currentEditContent)
       console.log(row)

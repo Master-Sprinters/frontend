@@ -3,6 +3,8 @@ import {FunctionComponent} from "react";
 import {Button, Form, InputNumber, DatePicker, Select, Row, Col, message, Radio} from "antd";
 import moment from "moment";
 import "../styles.css"
+import { ethers } from "ethers";
+
 
 
 type Params = {
@@ -11,6 +13,7 @@ type Params = {
     _transferDate: string,
     _budget: string,
     _isParentAcc: boolean,
+    contract: ethers.Contract | undefined,
 }
 
 type BtnParams = {
@@ -30,7 +33,7 @@ const budgetType = {
     TL: 1
 }
 
-const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate, _budget, _isParentAcc}: Params) => {
+const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate, _budget, _isParentAcc, contract}: Params) => {
 
 //vars
     const [form] = Form.useForm()
@@ -48,20 +51,32 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
     const [newDate, setNewDate] = useState<string>("")
 
 //button onClickmethods
-    const onClickSave = () => {
+    const onClickSave = async () => {
         console.log("save button clicked. New budget: " + newBudget)
 
         var change: number = newBudget
 
         if (newBudget != 0) {
             if (window.confirm('Yeni bilgileri kaydetmek istediğinize emin misiniz?')) {
-                console.log("save button: accepted")
+                console.log("save button: accepted onclicksave")
 
                 if (leftRadioClicked) {
-                    setBudget((parseInt(budget) + newBudget).toString())
+                    if(typeof contract !== 'undefined'){
+                        const addition = (parseInt(budget) + newBudget).toString()
+                        const sent = budget.toString()
+                        const res = await contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
+                        const res2 = await res.wait()
+                        console.log(res2)
+                        setBudget(addition)
+                    }
                 }
                 else {
-                    setBudget((parseInt(budget) + (-1 * newBudget)).toString())
+                    if(typeof contract !== 'undefined'){
+                        const res = await contract.parentWithdraw(accId, ethers.utils.parseEther(budget))
+                        const res2 = await res.wait()
+                        console.log(res2)
+                        setBudget((parseInt(budget) + (-1 * newBudget)).toString())
+                    }
                 }
  
                 message.info('Yeni bilgiler kaydedildi.');
@@ -79,7 +94,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
         console.log("save button clicked")
 
         if (window.confirm('Varlığı hesabınıza çekmek istediğinize emin misiniz?')) {
-            console.log("save button: accepted")
+            console.log("save button: accepted onclickwithdraw")
             setBudget("0")
             
             //back-end com

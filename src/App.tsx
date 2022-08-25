@@ -77,7 +77,8 @@ const App: FC = () => {
             contract={currentContract} />} />
           <Route path="child-screen" element={<ChildScreen
             userRole={userRole}
-            connectProvider={connectProvider} />} />
+            connectProvider={connectProvider} 
+            contract={currentContract} />} />
         </Routes>
       </div>
     </BrowserRouter>
