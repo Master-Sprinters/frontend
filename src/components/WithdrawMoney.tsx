@@ -89,21 +89,17 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                     }
                 }
 
-                if(typeof contract !== 'undefined'){
-                    console.log("Changing date")
-                    const res = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime() / 1000)))
-                    const res2 = await res.wait()
-                    console.log(res2)
-                }
-
                 displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
             }
             else {
                 console.log("save button: rejected")
             }
         }
-        else {
-            console.log("save button not valid")
+
+        if(typeof contract !== 'undefined'){
+            console.log("Changing date")
+            const res = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime() / 1000)))
+            console.log((Math.floor(newDate?.getTime() / 1000)))
         }
     }
 
@@ -207,7 +203,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                     <div>
                         <Form.Item
                             label={<div className="child-left-text"> Yeni Miktar : </div>}
-                            rules={[{ required: false, message: 'Lütfen miktarı giriniz.' }]}
+                            rules={[{ required: true, message: 'Lütfen miktarı giriniz.' }]}
                             labelAlign="right"
                         >
                             <Col>

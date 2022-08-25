@@ -135,7 +135,7 @@ import { ethers } from 'ethers';
           name: childrenData[i][1].concat(" ").concat(childrenData[i][2]),
           accountID: childrenData[i][0],
           amount: Number(childrenData[i][4].toHexString())/(Math.pow(10,18)),
-          dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
+          dueDate: new Date((childrenData[i][3] * 1000)).toDateString(),
         }
   
         currentChildren.push(element)
