@@ -139,9 +139,7 @@ import { ethers } from 'ethers';
           amount: Number(childrenData[i][4].toHexString())/(Math.pow(10,18)),
           dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
         }
-  
         currentChildren.push(element)
-        console.log(element.dueDate)
       }
       //setData(currentParents)
       displayChildTable(currentChildren)
