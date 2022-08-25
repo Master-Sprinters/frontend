@@ -4,6 +4,7 @@ import {Button, Form, InputNumber, DatePicker, Select, Row, Col, message, Radio}
 import moment from "moment";
 import "../styles.css"
 import { ethers } from "ethers";
+import notification, { NotificationPlacement } from "antd/lib/notification";
 
 
 
@@ -50,6 +51,15 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
     const [newBudget, setNewBudget] = useState<number>(0);
     const [newDate, setNewDate] = useState<string>("")
 
+    const { Option } = Select;
+
+    const displaySaveSuccesNotification = (placement: NotificationPlacement, userMessage: string) => {
+        notification.success({
+          message: userMessage,
+          placement,
+        });
+      };
+      
 //button onClickmethods
     const onClickSave = async () => {
         console.log("save button clicked. New budget: " + newBudget)
@@ -78,8 +88,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                         setBudget((parseInt(budget) + (-1 * newBudget)).toString())
                     }
                 }
- 
-                message.info('Yeni bilgiler kaydedildi.');
+                displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
             }
             else {
                 console.log("save button: rejected")
@@ -99,7 +108,8 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
             
             //back-end com
 
-            message.info('Para hesabınıza çekildi.');
+            displaySaveSuccesNotification('bottomRight', 'Para hesabınıza çekildi')
+
         }
         else {
             console.log("save button: rejected")
@@ -195,11 +205,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                                         onChange={(e) => e != null ? onBudgetChange(+e.valueOf()) : onBudgetChange(0)}
                                     />
                                     <Select defaultValue="Gwei" style={{ width: 100, paddingLeft: "10px" }}>
-                                        <Select value="TL">TL</Select>
-                                        <Select value="Wei">Wei</Select>
-                                        <Select value="Gwei">Gwei</Select>
-                                        <Select value="Finney">Finney</Select>
-                                        <Select value="Ether">Ether</Select>
+                                        <Option value="TL">TL</Option>
+                                        <Option value="Wei">Wei</Option>
+                                        <Option value="Gwei">Gwei</Option>
+                                        <Option value="Finney">Finney</Option>
+                                        <Option value="Ether">Ether</Option>
                                     </Select>
                                 </Row>
                                 <Row style={{paddingTop: "10px"}}>

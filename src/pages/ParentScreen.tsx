@@ -44,9 +44,7 @@ import { ethers } from 'ethers';
         connectProvider().then((res) => {if (res?.role !== 1) {//redirect to login page if role is not parent
           navigate("/")
         }})
-
       }
-  
     }
 
     useEffect(() => {

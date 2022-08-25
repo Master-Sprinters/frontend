@@ -29,7 +29,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
 
   const text = "İşlemi onaylıyor musunuz?"
 
-  const openNotification = (placement: NotificationPlacement) => {
+  const displaySuccesNotification = (placement: NotificationPlacement) => {
     notification.success({
       message: `Çocuk ekleme başarılı`,
       placement,
@@ -51,7 +51,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
       console.log(res2)
       console.log(deliverDate?.getTime())
       if(res2 !== 'undefined'){
-        openNotification('bottomRight')
+        displaySuccesNotification('bottomRight')
       }
     }
   }
