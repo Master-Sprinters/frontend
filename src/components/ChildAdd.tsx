@@ -46,7 +46,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
       return
     }
     if (typeof contract !== 'undefined') {
-      const res = await contract.addChild(childAccount, childFirstName, childLastName, (Math.floor(deliverDate?.getTime() / 1000)), { value: ethers.utils.parseEther(deliverAmount.toString()) })
+      const res = await contract.addChild(childAccount, childFirstName, childLastName, (Math.floor(deliverDate?.getTime())), { value: ethers.utils.parseEther(deliverAmount.toString()) })
       const res2 = await res.wait()
       console.log(res2)
       console.log(Math.floor(deliverDate?.getTime() / 1000))

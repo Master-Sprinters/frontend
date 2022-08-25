@@ -73,8 +73,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                     if(typeof contract !== 'undefined'){
                         const addition = (parseInt(budget) + newBudget).toString()
                         const res = await contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
-                        const res2 = await res.wait()
-                        console.log(res2)
                         setBudget(addition)
                     }
                 }
@@ -83,13 +81,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                     if(typeof contract !== 'undefined'){
                         const subtraction = (parseInt(budget) + (-1 * newBudget)).toString()
                         const res = await contract.parentWithdraw(accId, ethers.utils.parseEther(newBudget.toString()))
-                        const res2 = await res.wait()
-                        console.log(res2)
                         setBudget(subtraction)
                     }
                 }
 
-                displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
             }
             else {
                 console.log("save button: rejected")
@@ -98,9 +93,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
 
         if(typeof contract !== 'undefined'){
             console.log("Changing date")
-            const res = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime() / 1000)))
-            console.log((Math.floor(newDate?.getTime() / 1000)))
+            const res = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime())))
+            console.log((Math.floor(newDate?.getTime())))
         }
+        displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
+        setTransferDate(new Date(newDate?.getTime()).toDateString())
     }
 
     const onClickWithdraw = async () => {
