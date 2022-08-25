@@ -121,6 +121,8 @@ import { ethers } from 'ethers';
             columns={childColumns}
             dataSource={tableData}
             onChange={onChangeChildTable}
+            size='small'
+            pagination={{pageSize: 4}}
           />
         </div>
       ]

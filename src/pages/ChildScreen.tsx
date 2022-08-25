@@ -38,7 +38,7 @@ const ChildScreen:FC<Props> = ( {userRole, connectProvider, contract}) => {
             window.location.reload();
         }
       });
-      
+
     return (
         <WithdrawMoney _isParentAcc={false} _name={name} _accId={accId} _transferDate={transferDate} _budget={budget} contract={contract}/>
     )
