@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import {FunctionComponent} from "react";
-import {Button, Form, InputNumber, DatePicker, Select, Row, Col, message, Radio} from "antd";
+import React, { useState } from "react";
+import { FunctionComponent } from "react";
+import { Button, Form, InputNumber, DatePicker, Select, Row, Col, message, Radio } from "antd";
 import moment from "moment";
 import "../styles.css"
 import { ethers } from "ethers";
@@ -34,9 +34,9 @@ const budgetType = {
     TL: 1
 }
 
-const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate, _budget, _isParentAcc, contract}: Params) => {
+const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate, _budget, _isParentAcc, contract }: Params) => {
 
-//vars
+    //vars
     const [form] = Form.useForm()
 
     const [name, setName] = useState<string>(_name)
@@ -54,12 +54,12 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
 
     const displaySaveSuccesNotification = (placement: NotificationPlacement, userMessage: string) => {
         notification.success({
-          message: userMessage,
-          placement,
+            message: userMessage,
+            placement,
         });
-      };
-      
-//button onClickmethods
+    };
+
+    //button onClickmethods
     const onClickSave = async () => {
         console.log("save button clicked. New budget: " + newBudget)
 
@@ -70,17 +70,21 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                 console.log("save button: accepted onclicksave")
 
                 if (leftRadioClicked) {
-                    if(typeof contract !== 'undefined'){
+                    if (typeof contract !== 'undefined') {
                         const addition = (parseInt(budget) + newBudget).toString()
-                        const res = await contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
+                        const resAdd = await contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
+                        const resCheckAdd = await resAdd.wait()
+                        console.log(resCheckAdd)
                         setBudget(addition)
                     }
                 }
                 else {
                     console.log("elsein içi")
-                    if(typeof contract !== 'undefined'){
+                    if (typeof contract !== 'undefined') {
                         const subtraction = (parseInt(budget) + (-1 * newBudget)).toString()
-                        const res = await contract.parentWithdraw(accId, ethers.utils.parseEther(newBudget.toString()))
+                        const resSub = await contract.parentWithdraw(accId, ethers.utils.parseEther(newBudget.toString()))
+                        const resCheckSub = await resSub.wait()
+                        console.log(resCheckSub)
                         setBudget(subtraction)
                     }
                 }
@@ -91,15 +95,21 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
             }
         }
 
+
         if(typeof contract !== 'undefined' && newDate != new Date(0)){
             console.log("Changing date")
-            const res = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime())))
+            const resDate = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime())))
+            const resCheckDate = await resDate.wait()
+            console.log(resCheckDate)
             console.log((Math.floor(newDate?.getTime())))
             setNewDate(new Date(0))
         }
         
         displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
         setTransferDate(new Date(newDate?.getTime()).toDateString())
+        console.log("asd")
+        //await new Promise(f => setTimeout(f, 1000));
+        //window.location.reload()
     }
 
     const onClickWithdraw = async () => {
@@ -108,9 +118,9 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
         if (window.confirm('Varlığı hesabınıza çekmek istediğinize emin misiniz?')) {
             console.log("save button: accepted onclickwithdraw")
             setBudget("0")
-            
+
             //back-end com
-            if(typeof contract !== 'undefined'){
+            if (typeof contract !== 'undefined') {
                 const res = await contract.childWithdraw()
                 const res2 = await res.wait()
                 console.log(res2)
@@ -124,7 +134,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
         }
     }
 
-//input onChange methods
+    //input onChange methods
     const onBudgetChange = (e: number) => {
         console.log("new budget input: " + e)
         setNewBudget(e)
@@ -136,11 +146,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
     }
 
     const formLayout = {
-        labelCol: { span: 11},
-        wrapperCol: { span: 13},
+        labelCol: { span: 11 },
+        wrapperCol: { span: 13 },
     };
 
-//design components
+    //design components
     const getTitle = () => {
         var title: string
         var padding: string
@@ -155,7 +165,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
         }
 
         return (
-            <Row justify="center" className="child-header" style={{paddingTop: "75px", paddingBottom: "50px", paddingRight: padding}}>
+            <Row justify="center" className="child-header" style={{ paddingTop: "75px", paddingBottom: "50px", paddingRight: padding }}>
                 {title}
             </Row>
         )
@@ -173,15 +183,15 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
     }
 
     const btnParams: BtnParams = {
-        id: _isParentAcc ? "parent-btn": "child-btn",
-        text: _isParentAcc ? "Kaydet": "Parayı Çek",
-        height: _isParentAcc ? "60px": "65px",
-        width:  _isParentAcc ? "120px": "130px",
-        padding: _isParentAcc ? "30px": "25px",
-        onClick: _isParentAcc ? onClickSave: onClickWithdraw,
+        id: _isParentAcc ? "parent-btn" : "child-btn",
+        text: _isParentAcc ? "Kaydet" : "Parayı Çek",
+        height: _isParentAcc ? "60px" : "65px",
+        width: _isParentAcc ? "120px" : "130px",
+        padding: _isParentAcc ? "30px" : "25px",
+        onClick: _isParentAcc ? onClickSave : onClickWithdraw,
     }
 
-//desing
+    //desing
     return (
         <div>
             {getTitle()}
@@ -198,7 +208,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                 {getRow("Devir Tarihi :", transferDate)}
                 {getRow("Varlık Miktarı :", budget)}
 
-                {_isParentAcc &&                         
+                {_isParentAcc &&
                     <div>
                         <Form.Item
                             label={<div className="child-left-text"> Yeni Miktar : </div>}
@@ -207,8 +217,9 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                             <Col>
                                 <Row>
                                     <InputNumber
-                                        id="transfer-amount" min={0} required={true}
-                                        style={{width: "140px"}}
+                                        id="transfer-amount" min={0}
+                                        style={{ width: "140px" }}
+                                        defaultValue={0}
                                         onChange={(e) => e != null ? onBudgetChange(+e.valueOf()) : onBudgetChange(0)}
                                     />
                                     <Select defaultValue="Gwei" style={{ width: 100, paddingLeft: "10px" }}>
@@ -219,17 +230,17 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                                         <Option value="Ether">Ether</Option>
                                     </Select>
                                 </Row>
-                                <Row style={{paddingTop: "10px"}}>
-                                    <Radio.Group style={{width: "140px"}}>
+                                <Row style={{ paddingTop: "10px" }}>
+                                    <Radio.Group style={{ width: "140px" }}>
                                         <Radio.Button
-                                            style={{color: "black", backgroundColor: leftRadioClicked ? clickedRadioColor: "", width: "70px"}}
-                                            value="large" onClick={() => {setleftRadioClicked(true)}}
+                                            style={{ color: "black", backgroundColor: leftRadioClicked ? clickedRadioColor : "", width: "70px" }}
+                                            value="large" onClick={() => { setleftRadioClicked(true) }}
                                         >
                                             Ekle
                                         </Radio.Button>
                                         <Radio.Button
-                                            style={{color: "black", backgroundColor: leftRadioClicked ? "": clickedRadioColor, width: "70px"}}
-                                            value="large" onClick={() => {setleftRadioClicked(false)}}
+                                            style={{ color: "black", backgroundColor: leftRadioClicked ? "" : clickedRadioColor, width: "70px" }}
+                                            value="large" onClick={() => { setleftRadioClicked(false) }}
                                         >
                                             Çıkar
                                         </Radio.Button>
@@ -244,16 +255,16 @@ const WithdrawMoney: FunctionComponent<Params> = ({_name, _accId, _transferDate,
                         >
                             <DatePicker id="transfer-date"
                                 defaultValue={moment(transferDate)}
-                                allowClear={false} style={{width: "140px"}}
-                                onChange={(e: any, dateString: string) => onDateChange(e,dateString)}
+                                allowClear={false} style={{ width: "140px" }}
+                                onChange={(e: any, dateString: string) => onDateChange(e, dateString)}
                             />
                         </Form.Item>
                     </div>
                 }
-            
+
                 <Form.Item
                     wrapperCol={{ ...formLayout.wrapperCol, offset: 11 }}
-                    style={{paddingTop: btnParams.padding}}
+                    style={{ paddingTop: btnParams.padding }}
                 >
                     <Button id={btnParams.id} type="primary"
                         className="std-button" style={{width: btnParams.width, height: btnParams.height}}
