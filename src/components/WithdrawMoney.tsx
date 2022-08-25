@@ -45,10 +45,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     const [budget, setBudget] = useState<string>(_budget)
 
     const [leftRadioClicked, setleftRadioClicked] = useState<boolean>(true)
-    const [clickedRadioColor, setClickedRadioColor] = useState<string>("#40A9FF")
+    const clickedRadioColor = "#40A9FF"
 
     const [newBudget, setNewBudget] = useState<number>(0);
-    const [newDate, setNewDate] = useState<Date>(new Date(2000))
+    const [newDate, setNewDate] = useState<Date>(new Date(0))
 
     const { Option } = Select;
 
@@ -95,13 +95,16 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
             }
         }
 
-        if (typeof contract !== 'undefined') {
+
+        if(typeof contract !== 'undefined' && newDate != new Date(0)){
             console.log("Changing date")
             const resDate = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime())))
             const resCheckDate = await resDate.wait()
             console.log(resCheckDate)
             console.log((Math.floor(newDate?.getTime())))
+            setNewDate(new Date(0))
         }
+        
         displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
         setTransferDate(new Date(newDate?.getTime()).toDateString())
         console.log("asd")
@@ -208,7 +211,8 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 {_isParentAcc &&
                     <div>
                         <Form.Item
-                            label={<div className="child-left-text"> Yeni Miktar : </div>} labelAlign="right"
+                            label={<div className="child-left-text"> Yeni Miktar : </div>}
+                            labelAlign="right"
                         >
                             <Col>
                                 <Row>
@@ -262,8 +266,8 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                     wrapperCol={{ ...formLayout.wrapperCol, offset: 11 }}
                     style={{ paddingTop: btnParams.padding }}
                 >
-                    <Button id={btnParams.id} type="primary" htmlType="submit"
-                        className="std-button" style={{ width: btnParams.width, height: btnParams.height }}
+                    <Button id={btnParams.id} type="primary"
+                        className="std-button" style={{width: btnParams.width, height: btnParams.height}}
                         onClick={btnParams.onClick}
                     >
                         {btnParams.text}
