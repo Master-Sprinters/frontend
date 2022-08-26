@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FunctionComponent } from "react";
-import { Button, Form, InputNumber, DatePicker, Select, Row, Col, message, Radio } from "antd";
+import { Button, Form, InputNumber, DatePicker, Select, Row, Col, message, Radio, Popconfirm } from "antd";
 import moment from "moment";
 import "../styles.css"
 import { ethers } from "ethers";
 import notification, { NotificationPlacement } from "antd/lib/notification";
 
-
+const ethPrice = require('eth-price');
 
 type Params = {
     _name: string,
@@ -26,13 +26,17 @@ type BtnParams = {
     onClick: React.MouseEventHandler<HTMLElement>,
 }
 
-const budgetType = {
-    Ether: 0.000000001,
-    Wei: 1000000000,
-    Gwei: 1,
-    Finney: 0.000001,
-    TL: 1
+const units = ['Ether', 'Wei', 'Gwei', 'Finney', 'TRY']
+
+const unitFactors = {
+    Ether: 1000000,    //10^-18
+    Wei: 1,
+    Gwei: 1000,        //^-9
+    Finney: 100000,     //^-15
+    TRY: 1,
 }
+
+type UnitType = keyof typeof unitFactors;
 
 const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate, _budget, _isParentAcc, contract }: Params) => {
 
@@ -48,7 +52,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     const clickedRadioColor = "#40A9FF"
 
     const [newBudget, setNewBudget] = useState<number>(0);
+    const [displayBudget, setDisplayBudget] = useState<string>(budget)
     const [newDate, setNewDate] = useState<Date>(new Date(0))
+    var [submitUnit, setSubmitUnit] = useState<UnitType>("Wei")
+    var [displayUnit, setDisplayUnit] = useState<UnitType>("Wei")
 
     const { Option } = Select;
 
@@ -59,11 +66,28 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
         });
     };
 
+    let zeroDate: Date = new Date(0);
+
     //button onClickmethods
-    const onClickSave = async () => {
+    const onClickSave = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         console.log("save button clicked. New budget: " + newBudget)
 
-        var change: number = newBudget
+        var budgetChange: number = newBudget
+        var isTry: boolean = false;
+
+        if (submitUnit == "TRY") {
+            isTry = true
+            budgetChange = 1 / parseFloat((await ethPrice('try')).toString().replace("TRY: ", "").replace(",", ".")) //eth = 1 TL
+            submitUnit = "Ether"
+        }
+
+        var sentStr: string = budgetChange.toString()
+        var sentValue: ethers.BigNumber = ethers.utils.parseUnits(sentStr.substring(0, sentStr.indexOf('.') + 18), submitUnit.toLowerCase())
+        console.log("new budget: " + sentValue + " - " + submitUnit)
+
+        if (submitUnit == "Ether" && isTry) {
+            submitUnit = "TRY"
+        }
 
         if (newBudget != 0) {
             if (window.confirm('Yeni bilgileri kaydetmek istediğinize emin misiniz?')) {
@@ -71,10 +95,12 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
                 if (leftRadioClicked) {
                     if (typeof contract !== 'undefined') {
-                        contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
+                        contract.parentDeposit(accId, { value: ethers.utils.parseEther(sentValue.toString()) })
                             .then(async (res: any) => {
                                 await res.wait()
-                                const addition = (parseInt(budget) + newBudget).toString()
+                                displaySaveSuccesNotification('bottomRight', 'Para yatırıldı.')
+                                //const addition = (parseInt(budget) + newBudget).toString()
+                                const addition = (parseFloat(budget) + Number(sentValue)).toString()
                                 setBudget(addition)
                             })
                             .catch((err: any) => {
@@ -87,10 +113,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 }
                 else {
                     if (typeof contract !== 'undefined') {
-                        contract.parentWithdraw(accId, ethers.utils.parseEther(newBudget.toString()) )
+                        contract.parentWithdraw(accId, ethers.utils.parseEther(sentValue.toString()) )
                             .then(async (res: any) => {
                                 await res.wait()
-                                const subtraction = (parseInt(budget) + (-1 * newBudget)).toString()
+                                displaySaveSuccesNotification('bottomRight', 'Para çekildi.')
+                                const subtraction = (parseInt(budget) + (-1 * Number(sentValue))).toString()
                                 setBudget(subtraction)
                             })
                             .catch((err: any) => {
@@ -108,22 +135,20 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
             }
         }
 
-        if ((typeof contract !== 'undefined') && (newDate !== new Date(0))) {
-            console.log(Math.floor(newDate?.getTime()/1000))
-            contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime()/1000)))
-                .then(async (res: any) => {
-                    await res.wait()
-                    setNewDate(new Date(0))
-                    displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
-                    setTransferDate(new Date(newDate?.getTime()).toDateString())
-                    console.log("asd")
-                })
-                .catch((err: any) => {
-                    notification['error']({
-                        message: `Tarih değiştirme başarısız.`,
-                        description: `${err.reason}`
-                    });
-                })
+        try {
+            if(typeof contract !== 'undefined' && newDate.getTime() !== new Date(0).getTime()){
+                console.log("Changing date")
+                const resDate = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime()/1000)))
+                const resCheckDate = await resDate.wait()
+                setTransferDate(new Date(newDate?.getTime()).toDateString())
+                displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
+            }
+
+        } catch (err: any) {
+            notification['error']({
+                message: `Çocuk ekleme başarısız.`,
+                description: `${err.reason}`
+            });
         }
     }
 
@@ -132,14 +157,14 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
         if (window.confirm('Varlığı hesabınıza çekmek istediğinize emin misiniz?')) {
             console.log("save button: accepted onclickwithdraw")
-            setBudget("0")
-
+           
             //back-end com
             if (typeof contract !== 'undefined') {
                 contract.childWithdraw()
                 .then(async (res: any) => {
                     await res.wait()
                     displaySaveSuccesNotification('bottomRight', 'Para çekildi')
+                    setBudget("0")
                 })
                 .catch((err: any) => {
                     notification['error']({
@@ -152,6 +177,8 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
         else {
             console.log("save button: rejected")
         }
+
+
     }
 
     //input onChange methods
@@ -165,10 +192,15 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
         setNewDate(new Date(dateString))
     }
 
-    const formLayout = {
-        labelCol: { span: 11 },
-        wrapperCol: { span: 13 },
-    };
+    const updateDisplayBudget = () => {
+        if (displayUnit == "TRY") {
+            console.log("display unit: TRY")
+        }
+        else {
+            setDisplayBudget((parseFloat(budget) / parseFloat(ethers.utils.parseUnits("1", displayUnit.toLowerCase()).toString())).toString())
+            console.log("display unit: " + displayUnit)
+        }
+    }
 
     //design components
     const getTitle = () => {
@@ -211,6 +243,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
         onClick: _isParentAcc ? onClickSave : onClickWithdraw,
     }
 
+    const formLayout = {
+        labelCol: { span: 11 },
+        wrapperCol: { span: 13 },
+    };
+
     //desing
     return (
         <div>
@@ -226,7 +263,26 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 {getRow("İsim Soyisim :", name)}
                 {getRow("Hesap ID :", accId)}
                 {getRow("Devir Tarihi :", transferDate)}
-                {getRow("Varlık Miktarı :", budget)}
+
+                <Form.Item
+                    label={<div className="child-left-text"> Varlık Miktarı : </div>}
+                    labelAlign="right"
+                >
+                    <Row>
+                        <div className="child-text"> {displayBudget} </div>
+                        <Select defaultValue={"Wei"} style={{ width: 100, paddingLeft: "10px" }}
+                            onChange={(unit: UnitType) => {
+                                displayUnit = unit
+                                updateDisplayBudget()
+                            }}
+                        >
+                            {units.map(unit => (
+                                <Option key={unit}>{unit}</Option>
+                            ))}
+                        </Select>
+                    </Row>
+                </Form.Item>
+
 
                 {_isParentAcc &&
                     <div>
@@ -242,12 +298,12 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                         defaultValue={0}
                                         onChange={(e) => e != null ? onBudgetChange(+e.valueOf()) : onBudgetChange(0)}
                                     />
-                                    <Select defaultValue="Gwei" style={{ width: 100, paddingLeft: "10px" }}>
-                                        <Option value="TL">TL</Option>
-                                        <Option value="Wei">Wei</Option>
-                                        <Option value="Gwei">Gwei</Option>
-                                        <Option value="Finney">Finney</Option>
-                                        <Option value="Ether">Ether</Option>
+                                    <Select defaultValue={"Wei"} style={{ width: 100, paddingLeft: "10px" }}
+                                        onChange={(unit: UnitType) => { setSubmitUnit(unit) }}
+                                    >
+                                        {units.map(unit => (
+                                            <Option key={unit}>{unit}</Option>
+                                        ))}
                                     </Select>
                                 </Row>
                                 <Row style={{ paddingTop: "10px" }}>
@@ -286,12 +342,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                     wrapperCol={{ ...formLayout.wrapperCol, offset: 11 }}
                     style={{ paddingTop: btnParams.padding }}
                 >
-                    <Button id={btnParams.id} type="primary"
-                        className="std-button" style={{ width: btnParams.width, height: btnParams.height }}
-                        onClick={btnParams.onClick}
-                    >
+                    <Button id={btnParams.id} onClick={btnParams.onClick} type="primary"
+                        className="std-button" style={{ width: btnParams.width, height: btnParams.height }}>
                         {btnParams.text}
                     </Button>
+
                 </Form.Item>
 
             </Form>
