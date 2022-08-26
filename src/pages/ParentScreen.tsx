@@ -1,7 +1,18 @@
 import { FC, useEffect } from 'react';
 import 'antd/dist/antd.min.css';
 import "../styles.css"
-import { Table } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Row,
+  Popconfirm,
+  notification,
+  Table
+} from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import { useState } from 'react';
 import {
@@ -101,7 +112,25 @@ import { ethers } from 'ethers';
           width: 100,
           render: (row) => <a onClick={()=> displayEditContent(row)} >Varlık ve Tarihi Düzenle</a>,
         },
+        {
+          title: 'Sil',
+          key: 'operation2',
+          fixed: 'right',
+          width: 100,
+          render: (row) =>       <Popconfirm placement="bottomRight" title={"Çocuğu silip varlığı geri almak istediğinize emin misiniz?"} onConfirm={() => deleteChild(row.accountID)} okText="Evet" cancelText="Hayır">
+          <a style={{color: 'red'}}>Çocuğu Sil</a>
+        </Popconfirm>,
+        },
     ];
+
+    const deleteChild = async (accId: string) => {
+
+      if(contract !== undefined){
+        const res = await contract.cancelChild(accId)
+        const res2 = await res.wait()
+      }
+    };
+    
    
     const onChangeChildTable: TableProps<ChildDataType>['onChange'] = (pagination, sorter, extra) => {
       console.log('params', pagination, sorter, extra);
@@ -139,7 +168,9 @@ import { ethers } from 'ethers';
           amount: Number(childrenData[i][4].toHexString())/(Math.pow(10,18)),
           dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
         }
-        currentChildren.push(element)
+        if (element.accountID.toString() !== ethers.constants.AddressZero) {
+          currentChildren.push(element)
+        }
       }
       //setData(currentParents)
       displayChildTable(currentChildren)
