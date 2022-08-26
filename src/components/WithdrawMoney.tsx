@@ -70,16 +70,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 console.log("save button: accepted onclicksave")
 
                 if (leftRadioClicked) {
-                    /*                     if (typeof contract !== 'undefined') {
-                                            const addition = (parseInt(budget) + newBudget).toString()
-                                            const resAdd = await contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
-                                            const resCheckAdd = await resAdd.wait()
-                                            console.log(resCheckAdd)
-                                            setBudget(addition)
-                                        } */
                     if (typeof contract !== 'undefined') {
                         contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
-                            .then(() => {
+                            .then(async (res: any) => {
+                                await res.wait()
                                 const addition = (parseInt(budget) + newBudget).toString()
                                 setBudget(addition)
                             })
@@ -92,17 +86,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                     }
                 }
                 else {
-                    /*                     if (typeof contract !== 'undefined') {
-                                            const subtraction = (parseInt(budget) + (-1 * newBudget)).toString()
-                                            const resSub = await contract.parentWithdraw(accId, ethers.utils.parseEther(newBudget.toString()))
-                                            const resCheckSub = await resSub.wait()
-                                            console.log(resCheckSub)
-                                            setBudget(subtraction)
-                                        } */
-
                     if (typeof contract !== 'undefined') {
-                        contract.parentWithdraw(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
-                            .then(() => {
+                        contract.parentWithdraw(accId, ethers.utils.parseEther(newBudget.toString()) )
+                            .then(async (res: any) => {
+                                await res.wait()
                                 const subtraction = (parseInt(budget) + (-1 * newBudget)).toString()
                                 setBudget(subtraction)
                             })
@@ -121,17 +108,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
             }
         }
 
-        /*         if(typeof contract !== 'undefined' && newDate != new Date(0)){
-                    console.log("Changing date")
-                    const resDate = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime())))
-                    const resCheckDate = await resDate.wait()
-                    console.log(resCheckDate)
-                    console.log((Math.floor(newDate?.getTime())))
-                    setNewDate(new Date(0))
-                } */
-        if (typeof contract !== 'undefined' && newDate != new Date(0)) {
+        if ((typeof contract !== 'undefined') && (newDate !== new Date(0))) {
+            console.log(Math.floor(newDate?.getTime()/1000))
             contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime()/1000)))
-                .then((res: any) => {
+                .then(async (res: any) => {
+                    await res.wait()
                     setNewDate(new Date(0))
                     displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
                     setTransferDate(new Date(newDate?.getTime()).toDateString())
@@ -155,7 +136,9 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
             //back-end com
             if (typeof contract !== 'undefined') {
-                contract.childWithdraw().then(() => {
+                contract.childWithdraw()
+                .then(async (res: any) => {
+                    await res.wait()
                     displaySaveSuccesNotification('bottomRight', 'Para çekildi')
                 })
                 .catch((err: any) => {
