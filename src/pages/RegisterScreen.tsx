@@ -101,7 +101,7 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
         </Form.Item>
       </Form>
       </Col>
-      <Col className="register-right" span={12}>
+      <Col className="register-right" span={12} >
         <h5 className="register-welcome">Ether Mirasa Hoşgeldiniz</h5>
         <p className="register-welcome-description"> Kişiselleştirilmiş, kullanımı kolay ve güvenli.</p>
         <p className="register-welcome-description"> Çocuklarının geleceğine yatırım yapmak için ve platformun tüm  fonksiyonlarına 

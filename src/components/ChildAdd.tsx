@@ -36,7 +36,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
     });
   };
 
-  const handleChildAdd = async () => {
+  const handleChildAdd = () => {
     //splitting given input to get the name and surname
     let userNameSplitted = childName.split(" ", 2);
     let childFirstName = userNameSplitted[0]
@@ -47,7 +47,8 @@ const ChildAdd: FC<Props> = ({ contract }) => {
     }
     if (typeof contract !== 'undefined') {
       contract.addChild(childAccount, childFirstName, childLastName, (Math.floor(deliverDate?.getTime()/1000)), { value: ethers.utils.parseEther(deliverAmount.toString()) })
-      .then(() => {
+      .then(async (res:any) => {
+        await res.wait()
         displaySuccesNotification('bottomRight')
       })
       .catch((err: any) => {

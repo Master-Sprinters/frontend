@@ -139,11 +139,12 @@
     font-style: normal;
     font-weight: 500;
     font-size: 36px;
-    line-height: 60%;
-    padding-top: 50%;
     /* identical to box height, or 60% */
-    text-align: center;
+    text-align: match-parent;
     color: rgba(255, 255, 255, 0.85);
+    position: absolute;
+    bottom: 7%;
+    padding-left: 10%;
 }
 
 #parent-table-title {
