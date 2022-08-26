@@ -59,7 +59,7 @@ const ChildScreen: FC<Props> = ({ userRole, connectProvider, contract }) => {
             setRetrieved(true)
             setName(res.name.concat(" ").concat(res.surname));
             setAccId(res._address)
-            setTransferDate(new Date(Number(res.releaseDate.toHexString())).toDateString())
+            setTransferDate(new Date(Number(res.releaseDate.toHexString())*1000).toDateString())
             setBudget(ethers.utils.formatEther(res.balance))
         }
     };

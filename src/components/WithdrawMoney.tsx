@@ -70,22 +70,48 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 console.log("save button: accepted onclicksave")
 
                 if (leftRadioClicked) {
-                    if (typeof contract !== 'undefined') {
+/*                     if (typeof contract !== 'undefined') {
                         const addition = (parseInt(budget) + newBudget).toString()
                         const resAdd = await contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
                         const resCheckAdd = await resAdd.wait()
                         console.log(resCheckAdd)
                         setBudget(addition)
+                    } */
+                    if (typeof contract !== 'undefined') {
+                        contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
+                        .then(() => {
+                            const addition = (parseInt(budget) + newBudget).toString()
+                            setBudget(addition)
+                        })
+                        .catch((err: any) => {
+                          notification['error']({
+                            message: `Para yatırma başarısız.`,
+                            description: `${err.reason}`
+                          });
+                        })
                     }
                 }
                 else {
-                    console.log("elsein içi")
-                    if (typeof contract !== 'undefined') {
+/*                     if (typeof contract !== 'undefined') {
                         const subtraction = (parseInt(budget) + (-1 * newBudget)).toString()
                         const resSub = await contract.parentWithdraw(accId, ethers.utils.parseEther(newBudget.toString()))
                         const resCheckSub = await resSub.wait()
                         console.log(resCheckSub)
                         setBudget(subtraction)
+                    } */
+
+                    if (typeof contract !== 'undefined') {
+                        contract.parentDeposit(accId, { value: ethers.utils.parseEther(newBudget.toString()) })
+                        .then(() => {
+                            const subtraction = (parseInt(budget) + (-1 * newBudget)).toString()
+                            setBudget(subtraction)
+                        })
+                        .catch((err: any) => {
+                          notification['error']({
+                            message: `Para çekme başarısız.`,
+                            description: `${err.reason}`
+                          });
+                        })
                     }
                 }
 
@@ -95,14 +121,25 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
             }
         }
 
-
-        if(typeof contract !== 'undefined' && newDate != new Date(0)){
+/*         if(typeof contract !== 'undefined' && newDate != new Date(0)){
             console.log("Changing date")
             const resDate = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime())))
             const resCheckDate = await resDate.wait()
             console.log(resCheckDate)
             console.log((Math.floor(newDate?.getTime())))
             setNewDate(new Date(0))
+        } */
+        if (typeof contract !== 'undefined' && newDate != new Date(0)) {
+            contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime())))
+            .then(() => {
+                setNewDate(new Date(0))
+            })
+            .catch((err: any) => {
+              notification['error']({
+                message: `Tarih değiştirme başarısız.`,
+                description: `${err.reason}`
+              });
+            })
         }
         
         displaySaveSuccesNotification('bottomRight', 'Yeni Bilgiler Kaydedildi.')
