@@ -11,7 +11,8 @@ import { CONTRACT_ABI, CONTRACT_ADDRESS } from './services/Contract';
 
 const App: FC = () => {
 
-  const [username, setUserName] = useState("")
+  const [name, setName] = useState("")
+  const [surname, setSurname] = useState("")
   const [currentAddress, setCurrentAddress] = useState("")
   const [userRole, setUserRole] = useState(3)
   const [currentContract, setCurrentContract] = useState<ethers.Contract | undefined>()
@@ -52,16 +53,20 @@ const App: FC = () => {
       <div className="App">
         <Routes>
           <Route path="/" element={<RegisterScreen
-            username={username}
-            setUserName={setUserName}
+            name={name}
+            setName={setName}
+            surname={surname}
+            setSurname={setSurname}
             userRole={userRole}
             connectProvider={connectProvider}
             contract={currentContract}
             address={currentAddress}
             setUserRole={setUserRole} />} />
           <Route path="register-screen" element={<RegisterScreen
-            username={username}
-            setUserName={setUserName}
+            name={name}
+            setName={setName}
+            surname={surname}
+            setSurname={setSurname}
             userRole={userRole}
             connectProvider={connectProvider}
             contract={currentContract}

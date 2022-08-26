@@ -8,8 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 
 type Props = {
-  username: string;
-  setUserName: (username: string) => void;
+  name: string;
+  setName: (name: string) => void;
+  surname: string;
+  setSurname: (surname: string) => void;
   userRole: number;
   connectProvider: () => void;
   contract: ethers.Contract | undefined;
@@ -18,7 +20,7 @@ type Props = {
 
 }
 
-const RegisterScreen: FC<Props> = ({ username, setUserName, userRole, connectProvider, contract, address, setUserRole }) => {
+const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRole, connectProvider, contract, address, setUserRole }) => {
 
   const [showLoginBtn, setShowLoginBtn] = useState(true)
   const navigate = useNavigate()
@@ -40,17 +42,14 @@ const RegisterScreen: FC<Props> = ({ username, setUserName, userRole, connectPro
 
   const handleRegister = async () => {
     //splitting given input to get the name and surname
-    let userNameSplitted = username.split(" ", 2);
-    let uName = userNameSplitted[0]
-    let uSurName = userNameSplitted[1]
 
-    if(typeof uSurName === 'undefined'){
+    if((typeof name === 'undefined') || (typeof surname === 'undefined')){
       message.error('Lütfen geçerli bir isim-soyisim giriniz...')
       return
     }
-    console.log(uName, uSurName)
+    console.log(name, surname)
     if(typeof contract !== 'undefined'){
-      const res = await contract.addParent(address, uName, uSurName)
+      const res = await contract.addParent(address, name, surname)
       const res2 = await res.wait()
       console.log(res2)
       const role = await contract.getRole(address)
@@ -105,10 +104,16 @@ const RegisterScreen: FC<Props> = ({ username, setUserName, userRole, connectPro
       >
         <Form.Item
           label="İsim - Soy İsim"
-          name="username"
+          name="name"
           rules={[{ required: true, message: 'İsminizi ve Soy İsminizi giriniz...' }]}
         >
-          <Input onChange={(e) => setUserName(e.target.value)} />
+          <Input onChange={(e) => setName(e.target.value)} />
+        </Form.Item>
+        <Form.Item
+          name="surname"
+          rules={[{ required: true, message: 'İsminizi ve Soy İsminizi giriniz...' }]}
+        >
+          <Input onChange={(e) => setSurname(e.target.value)} />
         </Form.Item>
         <Form.Item style={{ textAlign: "center", paddingTop: "10%" }}>
           <Button id="register-btn" type="primary" htmlType="submit">
