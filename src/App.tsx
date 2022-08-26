@@ -8,6 +8,7 @@ import AdminScreen from './pages/AdminScreen';
 import ParentScreen from './pages/ParentScreen';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from './services/Contract';
+import LoginScreen from './pages/LoginScreen';
 
 const App: FC = () => {
 
@@ -52,16 +53,9 @@ const App: FC = () => {
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route path="/" element={<RegisterScreen
-            name={name}
-            setName={setName}
-            surname={surname}
-            setSurname={setSurname}
+          <Route path="/" element={<LoginScreen
             userRole={userRole}
-            connectProvider={connectProvider}
-            contract={currentContract}
-            address={currentAddress}
-            setUserRole={setUserRole} />} />
+            connectProvider={connectProvider} />} />
           <Route path="register-screen" element={<RegisterScreen
             name={name}
             setName={setName}

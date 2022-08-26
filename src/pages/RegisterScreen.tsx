@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import MasterPicture from "../components/Master.jpeg"
+import MasterPicture from "../images/Master.jpeg"
+import RegisterBackground from "../images/RegisterBackground.png"
 import { Button, Input, Form, message } from 'antd';
 import { FC } from "react";
 import { Col, Row } from 'antd';
@@ -22,7 +23,6 @@ type Props = {
 
 const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRole, connectProvider, contract, address, setUserRole }) => {
 
-  const [showLoginBtn, setShowLoginBtn] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -61,76 +61,52 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
     }
   }
 
-  const handleLogin = async () => {
-    
-    switch (userRole) {
-      case 0: { //admin
-        navigate("/admin-screen")
-        break;
-      }
-      case 1: { //parent
-        navigate("/parent-screen")
-        break;
-      }
-      case 2: { //child
-        navigate("/child-screen")
-        break;
-      }
-      default: {//unregistered
-        setShowLoginBtn(false)
-        break;
-      }
-    }
-  }
-
-  const displayLogin = () => {
-    if (showLoginBtn) {
-      return (
-        <Button id="register-btn" type="primary" htmlType="submit" onClick={handleLogin}>
-          Giriş Yap
-        </Button>
-      )
-    }
-    return (
+  return (
+    <Row justify="center" align="middle" >
+      <Col span={12} >
       <Form
         name="basic"
-        labelCol={{ span: 12 }}
-        wrapperCol={{ span: 12 }}
+        labelCol={{ offset:6, span: 12 }}
+        wrapperCol={{ offset:6, span: 12 }}
         layout="vertical"
         initialValues={{ remember: false }}
         onFinish={handleRegister}
         //onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <h5 className="register-header" >Kayıt Ol</h5>
+        <p className="register-description">Ether Miras’a hoşgeldin, isim ve soyadını gir ve siteyi kullanmaya başla</p>
         <Form.Item
-          label="İsim - Soy İsim"
+          label={ 
+            <p className="register-name-label">İsim</p>
+            }
           name="name"
           rules={[{ required: true, message: 'İsminizi ve Soy İsminizi giriniz...' }]}
         >
-          <Input onChange={(e) => setName(e.target.value)} />
+          <Input size="large" style={{ borderRadius:"10px"}} onChange={(e) => setName(e.target.value)} />
         </Form.Item>
         <Form.Item
           name="surname"
+          label={ 
+            <p className="register-name-label">Soyad</p>
+            }
           rules={[{ required: true, message: 'İsminizi ve Soy İsminizi giriniz...' }]}
         >
-          <Input onChange={(e) => setSurname(e.target.value)} />
+          <Input size="large" style={{ borderRadius:"10px"}} onChange={(e) => setSurname(e.target.value)} />
         </Form.Item>
-        <Form.Item style={{ textAlign: "center", paddingTop: "10%" }}>
+        <Form.Item style={{ textAlign: "center", paddingTop: "5%" }}>
           <Button id="register-btn" type="primary" htmlType="submit">
-            Kayıt Ol
+            KAYIT OL
           </Button>
         </Form.Item>
       </Form>
-    )
-  }
-
-  return (
-    <Row justify="center" align="middle">
-      <Col span={12} style={{ textAlign: "center" }}>
-        <img className="master-img" src={MasterPicture} alt="Master"></img>
       </Col>
-      <Col span={12} style={{ paddingLeft: "100px" }}>
-        {displayLogin()}
+      <Col className="register-right" span={12}>
+        <h5 className="register-welcome">Ether Mirasa Hoşgeldiniz</h5>
+        <p className="register-welcome-description"> Kişiselleştirilmiş, kullanımı kolay ve güvenli.</p>
+        <p className="register-welcome-description"> Çocuklarının geleceğine yatırım yapmak için ve platformun tüm  fonksiyonlarına 
+erişmek için şimdi kaydol.</p>
+        <h5 className="register-welcome-bottom">Çocuklarının Geleceğine Yatırım Yap.</h5>
       </Col>
     </Row>
   );
