@@ -22,6 +22,7 @@ import {
 import ChildAdd from '../components/ChildAdd';
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
 import WithdrawMoney from '../components/WithdrawMoney';
+import MainMenu from '../components/MainMenu';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
@@ -189,7 +190,7 @@ import { ethers } from 'ethers';
   
     useEffect(() => {
       //Runs only on the first render, calls parent table from backend
-      connectChildren()
+      displayMain()
   
     }, []);
 
@@ -209,9 +210,37 @@ import { ethers } from 'ethers';
       console.log(row)
     }
 
+    const displayMain = () => {
+      // yazıyı falan ekle
+      // graph api
+      // çocuklara aktarılan toplam miktar yazdır
+
+      var clientName
+      var clientAddress
+
+      if (typeof contract !== 'undefined') {
+        contract.getParent()
+          .then(async (res: any) => {
+            const setMainMenu = [
+              <MainMenu clientName={res.name} clientAddress={res._address}/>
+            ]
+            
+            setCurrentScreen(setMainMenu)
+          })
+          .catch((err: any) => {
+            notification['error']({
+              message: `Hata.`,
+              description: `${err.reason}`
+            });
+          })
+      }
+    }
+
     const handleCurrentContent = (e: MenuItem) => {
       console.log(e?.key)
-      if (e?.key === '2') {
+      if (e?.key === '1') {
+        displayMain()
+      } else if (e?.key === '2') {
         connectChildren()
       } else if (e?.key === '3') {
         setCurrentScreen(childAddDepositForm)
