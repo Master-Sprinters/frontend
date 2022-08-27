@@ -3,7 +3,7 @@ import { FunctionComponent } from "react";
 import { Button, Form, InputNumber, DatePicker, Select, Row, Col, message, Radio, Popconfirm } from "antd";
 import moment from "moment";
 import "../styles.css"
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import notification, { NotificationPlacement } from "antd/lib/notification";
 
 const ethPrice = require('eth-price');
@@ -54,7 +54,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     const [newBudget, setNewBudget] = useState<number>(0);
     const [displayBudget, setDisplayBudget] = useState<string>(budget)
     const [newDate, setNewDate] = useState<Date>(new Date(0))
-    var [submitUnit, setSubmitUnit] = useState<UnitType>("Wei")
+    var [submitUnit, setSubmitUnit] = useState<UnitType>("Ether")
     var [displayUnit, setDisplayUnit] = useState<UnitType>("Wei")
 
     const { Option } = Select;
@@ -77,13 +77,16 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
         if (submitUnit == "TRY") {
             isTry = true
-            budgetChange = 1 / parseFloat((await ethPrice('try')).toString().replace("TRY: ", "").replace(",", ".")) //eth = 1 TL
+            // alınan string'i parse'lar, 27000 gibi bir değer kalır. sonra newbudget / 27000 değeri işlemi yapılır
+            budgetChange = newBudget / parseFloat((await ethPrice('try')).toString().replace("TRY: ", "").replace(",", ".")) 
             submitUnit = "Ether"
         }
 
         var sentStr: string = budgetChange.toString()
-        var sentValue: ethers.BigNumber = ethers.utils.parseUnits(sentStr.substring(0, sentStr.indexOf('.') + 18), submitUnit.toLowerCase())
+        console.log(sentStr)
+        var sentValue: ethers.BigNumber = ethers.utils.parseUnits(sentStr, submitUnit.toLowerCase())
         console.log("new budget: " + sentValue + " - " + submitUnit)
+        console.log(Number(sentValue))
 
         if (submitUnit == "Ether" && isTry) {
             submitUnit = "TRY"
@@ -95,11 +98,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
                 if (leftRadioClicked) {
                     if (typeof contract !== 'undefined') {
-                        contract.parentDeposit(accId, { value: ethers.utils.parseEther(sentValue.toString()) })
+                        contract.parentDeposit(accId, { value: sentValue })
                             .then(async (res: any) => {
                                 await res.wait()
                                 displaySaveSuccesNotification('bottomRight', 'Para yatırıldı.')
-                                //const addition = (parseInt(budget) + newBudget).toString()
                                 const addition = (parseFloat(budget) + Number(sentValue)).toString()
                                 setBudget(addition)
                             })
@@ -113,11 +115,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 }
                 else {
                     if (typeof contract !== 'undefined') {
-                        contract.parentWithdraw(accId, ethers.utils.parseEther(sentValue.toString()) )
+                        contract.parentWithdraw(accId, sentValue)
                             .then(async (res: any) => {
                                 await res.wait()
                                 displaySaveSuccesNotification('bottomRight', 'Para çekildi.')
-                                const subtraction = (parseInt(budget) + (-1 * Number(sentValue))).toString()
+                                const subtraction = (parseFloat(budget) + (-1 * Number(sentValue))).toString()
                                 setBudget(subtraction)
                             })
                             .catch((err: any) => {
@@ -298,7 +300,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                         defaultValue={0}
                                         onChange={(e) => e != null ? onBudgetChange(+e.valueOf()) : onBudgetChange(0)}
                                     />
-                                    <Select defaultValue={"Wei"} style={{ width: 100, paddingLeft: "10px" }}
+                                    <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px" }}
                                         onChange={(unit: UnitType) => { setSubmitUnit(unit) }}
                                     >
                                         {units.map(unit => (
