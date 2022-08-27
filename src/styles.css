@@ -100,20 +100,6 @@
     font-style: normal;
 }
 
-#register-btn {
-    width: 280px;
-    height: 80px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 40px;
-    font: Roboto;
-    padding: 10px, 16px, 10px, 16px;
-    color: #FFFFFF;
-    background: #5C2CA4;
-    border-radius: 30px;
-    gap: 10px;
-}
-
 .register-welcome {
     display: flex;
     flex-direction: row;
@@ -181,9 +167,17 @@
 }
 
 #eth-logo {
-    position: relative;
-    top: 10vh;
+    position: absolute;
     width: 60%;
+    left: 10;
+    bottom: 10vh;
+}
+
+#smart-contract-img {
+    position: relative;
+    margin-top: 5%;
+    height: 65vh;
+    border-radius: 30px;
 }
 
 #eth-legacy-logo {
@@ -192,6 +186,58 @@
     padding-top: 5%;
     padding-bottom: 5%;
     width: 80%;
+}
+
+.login-left {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 0 30px 30px 0;
+    text-align: left;
+    height: 65vh;
+}
+
+.login-left-title {
+    font: Helvetica;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 44px;
+    color: #000000;
+    margin: 5%;
+    padding-top: 5%;
+}
+
+.login-left-description {
+    font: Helvetica;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    color: #333333;
+    margin: 5%;
+    margin-bottom: 0;
+}
+
+#login-btn {
+    width: 280px;
+    height: 80px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    font: Roboto;
+    color: #FFFFFF;
+    background: #5C2CA4;
+    border-radius: 30px;
+    margin: 5%;
+}
+
+#login-top-img {
+    width: 100%;
+    height: 12vh;
+    object-fit: cover;
+}
+
+#login-bottom {
+    background-image: url("./images/LoginBottom.svg");
+    background-size: 100% 100%;
+    height: 135vh;
 }
 
 .ant-menu {
