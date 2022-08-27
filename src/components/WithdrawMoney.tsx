@@ -5,6 +5,7 @@ import moment from "moment";
 import "../styles.css"
 import { BigNumber, ethers } from "ethers";
 import notification, { NotificationPlacement } from "antd/lib/notification";
+import { parseUnits, parseEther } from "ethers/lib/utils";
 
 const ethPrice = require('eth-price');
 
@@ -55,7 +56,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     const [displayBudget, setDisplayBudget] = useState<string>(budget)
     const [newDate, setNewDate] = useState<Date>(new Date(0))
     var [submitUnit, setSubmitUnit] = useState<UnitType>("Ether")
-    var [displayUnit, setDisplayUnit] = useState<UnitType>("Wei")
 
     const { Option } = Select;
 
@@ -71,6 +71,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     //button onClickmethods
     const onClickSave = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         console.log("save button clicked. New budget: " + newBudget)
+        console.log("curr budget: " + budget)
 
         var budgetChange: number = newBudget
         var isTry: boolean = false;
@@ -84,7 +85,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
         var sentStr: string = budgetChange.toString()
         console.log(sentStr)
-        var sentValue: ethers.BigNumber = ethers.utils.parseUnits(sentStr, submitUnit.toLowerCase())
+        var sentValue: ethers.BigNumber = parseUnits(sentStr, submitUnit.toLowerCase())
         console.log("new budget: " + sentValue + " - " + submitUnit)
         console.log(Number(sentValue))
 
@@ -102,7 +103,8 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                             .then(async (res: any) => {
                                 await res.wait()
                                 displaySaveSuccesNotification('bottomRight', 'Para yatırıldı.')
-                                const addition = (parseFloat(budget) + Number(sentValue)).toString()
+                                const addition = (parseFloat(budget) + Number(sentValue) / Number(parseEther("1"))).toString()
+                                console.log("addition: " + (parseFloat(budget) + Number(sentValue)))
                                 setBudget(addition)
                             })
                             .catch((err: any) => {
@@ -119,7 +121,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                             .then(async (res: any) => {
                                 await res.wait()
                                 displaySaveSuccesNotification('bottomRight', 'Para çekildi.')
-                                const subtraction = (parseFloat(budget) + (-1 * Number(sentValue))).toString()
+                                const subtraction = (parseFloat(budget) + (-1 * Number(sentValue) / Number(parseEther("1")))).toString()
                                 setBudget(subtraction)
                             })
                             .catch((err: any) => {
@@ -194,16 +196,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
         setNewDate(new Date(dateString))
     }
 
-    const updateDisplayBudget = () => {
-        if (displayUnit == "TRY") {
-            console.log("display unit: TRY")
-        }
-        else {
-            setDisplayBudget((parseFloat(budget) / parseFloat(ethers.utils.parseUnits("1", displayUnit.toLowerCase()).toString())).toString())
-            console.log("display unit: " + displayUnit)
-        }
-    }
-
     //design components
     const getTitle = () => {
         var title: string
@@ -265,26 +257,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 {getRow("İsim Soyisim :", name)}
                 {getRow("Hesap ID :", accId)}
                 {getRow("Devir Tarihi :", transferDate)}
-
-                <Form.Item
-                    label={<div className="child-left-text"> Varlık Miktarı : </div>}
-                    labelAlign="right"
-                >
-                    <Row>
-                        <div className="child-text"> {displayBudget} </div>
-                        <Select defaultValue={"Wei"} style={{ width: 100, paddingLeft: "10px" }}
-                            onChange={(unit: UnitType) => {
-                                displayUnit = unit
-                                updateDisplayBudget()
-                            }}
-                        >
-                            {units.map(unit => (
-                                <Option key={unit}>{unit}</Option>
-                            ))}
-                        </Select>
-                    </Row>
-                </Form.Item>
-
+                {getRow("Varlık Miktarı :", budget + " ETH")}
 
                 {_isParentAcc &&
                     <div>
