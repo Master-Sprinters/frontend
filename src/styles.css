@@ -1,4 +1,5 @@
 .App {
+    background-image: url("./images/SiteBackground.jpg");
     background-color: #FFFFFF;
     position: fixed;
     padding: 0;
@@ -61,6 +62,15 @@
     height: 100vh;
 }
 
+.register-left {
+    background-color: #FFFFFF;
+    background-size: cover;
+    background-image: none;
+    width: 100%;
+    height: 100vh;
+    padding-top: 10vh;
+}
+
 .register-header {
     padding-left: 25%;
     font-size: 44px;
@@ -115,7 +125,7 @@
     font-style: normal;
     font-weight: 500;
     font-size: 44px;
-    line-height: 24px;
+    line-height: 36px;
     color: rgba(255, 255, 255, 0.85);
     text-align: center;
 }
@@ -140,22 +150,139 @@
     font-weight: 500;
     font-size: 36px;
     /* identical to box height, or 60% */
-    text-align: match-parent;
+    text-align: center;
     color: rgba(255, 255, 255, 0.85);
+    width: 95%;
     position: absolute;
     bottom: 7%;
-    padding-left: 10%;
+    padding-left: 5vw;
 }
 
 #parent-table-title {
     text-align: center;
     font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
+    font: Helvetica;
+    font-weight: 400;
+    font-size: 32px;
     line-height: 24px;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.content {
+    background-image: url("./images/SiteBackground.jpg");
+    background-size: cover;
+}
+
+.image-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#eth-logo {
+    position: absolute;
+    bottom: 10%;
+    width: 60%;
+}
+
+#eth-legacy-logo {
+    position: relative;
+    top: 10%;
     padding-top: 5%;
     padding-bottom: 5%;
-    color: rgba(0, 0, 0, 0.85);
+    width: 80%;
+}
+
+.ant-menu {
+    border-radius: 0 30px 0 0;
+    background: none !important;
+    color: #FFFFFF;
+}
+
+.ant-menu-item {
+    background: none !important;
+    color: #FFFFFF;
+}
+
+.ant-menu-item-selected {
+    background: none !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #FFFFFF !important;
+}
+
+.ant-menu-item-active {
+    background: none !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #FFFFFF !important;
+}
+
+.ant-layout-sider-children {
+    background: none !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0 30px 0 0;
+}
+
+.ant-layout-sider {
+    border-radius: 0 30px 30px 0;
+    background: rgba(255, 255, 255, 0.1) !important;
+    background: none !important;
+}
+
+.ant-layout-sider-trigger {
+    border-radius: 0 0 30px 0;
+    background-color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-layout {
+    background: none !important;
+}
+
+.ant-menu-inline {
+    border-right: none !important;
+}
+
+.ant-menu-item:after {
+    border-right: none !important;
+}
+
+.table-layout {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    margin-top: 10%;
+}
+
+.child-add-form {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    width: 50%;
+    margin: auto;
+}
+
+#child-add-title {
+    font: 'Helvetica';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 24px;
+    /* identical to box height, or 60% */
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 5%;
+    /* Inside auto layout */
+}
+
+.child-add-label {
+    font: Noto Sans;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 22px;
+    padding: 0;
+    margin: 0;
+    color: #595959;
 }
 
 #edit-assets-title {

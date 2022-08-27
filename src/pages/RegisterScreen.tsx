@@ -63,7 +63,7 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
 
   return (
     <Row justify="center" align="middle" >
-      <Col span={12} >
+      <Col span={12} className="register-left">
       <Form
         name="basic"
         labelCol={{ offset:6, span: 12 }}

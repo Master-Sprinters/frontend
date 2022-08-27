@@ -46,60 +46,62 @@ const ChildAdd: FC<Props> = ({ contract }) => {
       return
     }
     if (typeof contract !== 'undefined') {
-      contract.addChild(childAccount, childFirstName, childLastName, (Math.floor(deliverDate?.getTime()/1000)), { value: ethers.utils.parseEther(deliverAmount.toString()) })
-      .then(async (res:any) => {
-        await res.wait()
-        displaySuccesNotification('bottomRight')
-      })
-      .catch((err: any) => {
-        notification['error']({
-          message: `Çocuk ekleme başarısız.`,
-          description: `${err.reason}`
-        });
-      })
+      contract.addChild(childAccount, childFirstName, childLastName, (Math.floor(deliverDate?.getTime() / 1000)), { value: ethers.utils.parseEther(deliverAmount.toString()) })
+        .then(async (res: any) => {
+          await res.wait()
+          displaySuccesNotification('bottomRight')
+        })
+        .catch((err: any) => {
+          notification['error']({
+            message: `Çocuk ekleme başarısız.`,
+            description: `${err.reason}`
+          });
+        })
     }
   }
 
   return (
     <>
-      <h5 id="parent-table-title"> Çocuk Ekle ve Para Yatır</h5>
-      <Row justify="center" align="middle">
-        <Col span={20}>
-          <Form
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 14 }}
-            layout="horizontal"
-            size="large"
-          >
-            <Form.Item label="Ad Ve Soyad Giriz"
-              rules={[{ required: true, message: 'Çocuğunuzun adını ve soyadını giriniz...' }]}
+      <h5 id="child-add-title"> Çocuk Ekle ve Para Yatır</h5>
+      <div className="child-add-form">
+        <Row justify="center" align="middle">
+          <Col span={20}>
+            <Form
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 14 }}
+              layout="vertical"
+              size="large"
             >
-              <Input onChange={(e) => setChildName(e.target.value)} />
-            </Form.Item>
-            <Form.Item label="Hesap Bilgisi"
-              rules={[{ required: true, message: 'Lütfen bilgisi giriniz...' }]}
-            >
-              <Input onChange={(e) => setChildAccount(e.target.value)} />
-            </Form.Item>
+              <Form.Item label="Ad Ve Soyad Giriz"
+                rules={[{ required: true, message: 'Çocuğunuzun adını ve soyadını giriniz...' }]}
+              >
+                <Input onChange={(e) => setChildName(e.target.value)} />
+              </Form.Item>
+              <Form.Item label="Hesap Bilgisi"
+                rules={[{ required: true, message: 'Lütfen bilgisi giriniz...' }]}
+              >
+                <Input onChange={(e) => setChildAccount(e.target.value)} />
+              </Form.Item>
 
-            <Form.Item label="Devredilicek Tarih"
-              rules={[{ required: true, message: 'Geçerli bir devir tarihi giriniz' }]}
-            >
-              <DatePicker onChange={(e) => setDeliverDate(e!.toDate())} />
-            </Form.Item >
-            <Form.Item label="Devredilicek Miktar"
-            rules={[{ required: true, message: 'Devredilecek miktarı giriniz' }]}
->
-              <InputNumber onChange={(e) => setDeliverAmount(+e.valueOf())} />
-            </Form.Item>
-            <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: "center", paddingTop: "5%" }}>
-              <Popconfirm placement="bottom" title={text} onConfirm={handleChildAdd} okText="Evet" cancelText="Hayır">
-                <Button type="primary" htmlType="submit" >Kaydet</Button>
-              </Popconfirm>
-            </Form.Item>
-          </Form>
-        </Col>
-      </Row>
+              <Form.Item label="Devredilicek Tarih"
+                rules={[{ required: true, message: 'Geçerli bir devir tarihi giriniz' }]}
+              >
+                <DatePicker onChange={(e) => setDeliverDate(e!.toDate())} />
+              </Form.Item >
+              <Form.Item label="Devredilicek Miktar"
+                rules={[{ required: true, message: 'Devredilecek miktarı giriniz' }]}
+              >
+                <InputNumber onChange={(e) => setDeliverAmount(+e.valueOf())} />
+              </Form.Item>
+              <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: "center", paddingTop: "5%" }}>
+                <Popconfirm placement="bottom" title={text} onConfirm={handleChildAdd} okText="Evet" cancelText="Hayır">
+                  <Button type="primary" htmlType="submit" >Kaydet</Button>
+                </Popconfirm>
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
+      </div>
     </>
   );
 };
