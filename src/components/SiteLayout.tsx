@@ -1,5 +1,7 @@
 import { FC, useState } from "react";
 import { Layout, Menu, MenuProps } from "antd";
+import EthLogo from "../images/EthLogo.png"
+import EthMiras from "../images/EtherMiras.png"
 
 export type MenuItem = Required<MenuProps>['items'][number];
 
@@ -29,11 +31,12 @@ const SiteLayout: FC<Props> = ({ child, menuItems, handleContent }) => {
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider width="250px" collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
-                <div className="logo" />
-                <Menu onClick={handleContent} theme="dark" defaultSelectedKeys={['1']} mode="inline" items={menuItems} />
+            <div className="image-wrapper"><img id="eth-legacy-logo" src={EthMiras} alt="eth"/></div>
+                <Menu onClick={handleContent} defaultSelectedKeys={['1']} mode="inline" items={menuItems} />
+                <div className="image-wrapper"><img id="eth-logo" src={EthLogo} alt="eth"/></div>
             </Sider>
             <Layout className="site-layout">
-                <Content style={{ margin: '0 16px' }}>
+                <Content className="content">
                     {child}
                 </Content>
             </Layout>
