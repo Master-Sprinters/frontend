@@ -56,7 +56,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     const [displayBudget, setDisplayBudget] = useState<string>(budget)
     const [newDate, setNewDate] = useState<Date>(new Date(0))
     var [submitUnit, setSubmitUnit] = useState<UnitType>("Ether")
-    var [displayUnit, setDisplayUnit] = useState<UnitType>("Wei")
 
     const { Option } = Select;
 
@@ -195,16 +194,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     const onDateChange = (e: any, dateString: string) => {
         console.log(dateString)
         setNewDate(new Date(dateString))
-    }
-
-    const updateDisplayBudget = () => {
-        if (displayUnit == "TRY") {
-            console.log("display unit: TRY")
-        }
-        else {
-            setDisplayBudget((parseFloat(budget) / parseFloat(parseUnits("1", displayUnit.toLowerCase()).toString())).toString())
-            console.log("display unit: " + displayUnit)
-        }
     }
 
     //design components
