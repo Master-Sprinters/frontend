@@ -75,17 +75,16 @@ const ChildAdd: FC<Props> = ({ contract }) => {
     }
 
     var sentStr: string = budgetChange.toString()
-    console.log(sentStr)
     var sentValue: ethers.BigNumber = ethers.utils.parseUnits(sentStr, submitUnit.toLowerCase())
-    console.log("new budget: " + sentValue + " - " + submitUnit)
-    console.log(Number(sentValue))
+    console.log("sent unit: " + submitUnit)
+    console.log("sent value: " + sentValue + " wei")
 
     if (submitUnit == "Ether" && isTry) {
         submitUnit = "TRY"
     }
 
     if (typeof contract !== 'undefined') {
-      contract.addChild(childAccount, childName, childSurname, (Math.floor(deliverDate?.getTime()/1000)), { value: deliverAmount})
+      contract.addChild(childAccount, childName, childSurname, (Math.floor(deliverDate?.getTime()/1000)), { value: sentValue})
       .then(async (res:any) => {
         await res.wait()
         displaySuccesNotification('bottomRight')
@@ -136,8 +135,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
               <Col>
                 <Row>
                   <InputNumber onChange={(e) => setDeliverAmount(+e.valueOf())} />
-                  <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px" }} onChange={(unit: UnitType) => { setSubmitUnit(unit);
-                    console.log(submitUnit) }}>
+                  <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px" }} onChange={(unit: UnitType) => { setSubmitUnit(unit) }}>
                       {units.map(unit => (<Option key={unit}>{unit}</Option>))}
                   </Select>
                 </Row>
