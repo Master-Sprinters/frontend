@@ -66,12 +66,12 @@ const ChildAdd: FC<Props> = ({ contract }) => {
     var isTry: boolean = false;
 
     if (submitUnit == "TRY") {
-        isTry = true
-        console.log("try içindeyim")
-        console.log(await ethPrice('try'))
-        // alınan string'i parse'lar, 27000 gibi bir değer kalır. sonra deliverAmount / 27000 değeri işlemi yapılır
-        budgetChange = deliverAmount / parseFloat((await ethPrice('try')).toString().replace("TRY: ", "").replace(",", ".")) 
-        submitUnit = "Ether"
+      isTry = true
+      console.log("try içindeyim")
+      console.log(await ethPrice('try'))
+      // alınan string'i parse'lar, 27000 gibi bir değer kalır. sonra deliverAmount / 27000 değeri işlemi yapılır
+      budgetChange = deliverAmount / parseFloat((await ethPrice('try')).toString().replace("TRY: ", "").replace(",", "."))
+      submitUnit = "Ether"
     }
 
     var sentStr: string = budgetChange.toString()
@@ -80,78 +80,80 @@ const ChildAdd: FC<Props> = ({ contract }) => {
     console.log("sent value: " + sentValue + " wei")
 
     if (submitUnit == "Ether" && isTry) {
-        submitUnit = "TRY"
+      submitUnit = "TRY"
     }
 
     if (typeof contract !== 'undefined') {
 
-      contract.addChild(childAccount, childName, childSurname, (Math.floor(deliverDate?.getTime()/1000)), { value: sentValue})
-      .then(async (res:any) => {
-        await res.wait()
-        displaySuccesNotification('bottomRight')
-      })
-      .catch((err: any) => {
-        notification['error']({
-          message: `Çocuk ekleme başarısız.`,
-          description: `${err.reason}`
-        });
-      })
+      contract.addChild(childAccount, childName, childSurname, (Math.floor(deliverDate?.getTime() / 1000)), { value: sentValue })
+        .then(async (res: any) => {
+          await res.wait()
+          displaySuccesNotification('bottomRight')
+        })
+        .catch((err: any) => {
+          notification['error']({
+            message: `Çocuk ekleme başarısız.`,
+            description: `${err.reason}`
+          });
+        })
     }
   }
 
   return (
     <>
-      <h5 id="parent-table-title"> Çocuk Ekle ve Para Yatır</h5>
-      <Row justify="center" align="middle">
-        <Col span={20}>
-          <Form
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 14 }}
-            layout="horizontal"
-            size="large"
-          >
-            <Form.Item label="Ad Girişi"
-              rules={[{ required: true, message: 'Çocuğunuzun adını giriniz...' }]}
+      <h5 id="child-add-title"> Çocuk Ekle ve Para Yatır</h5>
+      <div className="child-add-form">
+        <Row justify="center" align="middle">
+          <Col span={16}>
+            <Form
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              layout="vertical"
+              size="middle"
+              style={{textAlign:"center"}}
             >
-              <Input onChange={(e) => setChildName(e.target.value)} />
-            </Form.Item>
-            <Form.Item label="Soyad Girişi"
-              rules={[{ required: true, message: 'Çocuğunuzun soy adını giriniz...' }]}
-            >
-              <Input onChange={(e) => setChildSurname(e.target.value)} />
-            </Form.Item>
-            <Form.Item label="Hesap Bilgisi"
-              rules={[{ required: true, message: 'Lütfen bilgisi giriniz...' }]}
-            >
-              <Input onChange={(e) => setChildAccount(e.target.value)} />
-            </Form.Item>
-
-            <Form.Item label="Devredilicek Tarih"
-              rules={[{ required: true, message: 'Geçerli bir devir tarihi giriniz' }]}
-            >
-              <DatePicker onChange={(e) => setDeliverDate(e!.toDate())} />
-            </Form.Item >
-            <Form.Item label="Devredilicek Miktar"
-            rules={[{ required: true, message: 'Devredilecek miktarı giriniz' }]}>
-              <Col>
-                <Row>
-                  <InputNumber onChange={(e) => setDeliverAmount(+e.valueOf())} />
-                  <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px" }} onChange={(unit: UnitType) => { setSubmitUnit(unit) }}>
+              <Form.Item style={{paddingTop:"30px"}} label={<label className="child-add-label">Çocuğunuzun Adı:</label>}
+                rules={[{ required: true, message: 'Çocuğunuzun adını giriniz...' }]}
+              >
+                <Input onChange={(e) => setChildName(e.target.value)} />
+              </Form.Item>
+              <Form.Item label={<label className="child-add-label">Çocuğunuzun Soyadı:</label>}
+                rules={[{ required: true, message: 'Çocuğunuzun soy adını giriniz...' }]}
+              >
+                <Input onChange={(e) => setChildSurname(e.target.value)} />
+              </Form.Item>
+              <Form.Item label={<label className="child-add-label">Çocuğunuzun Hesap Adresi:</label>}
+                rules={[{ required: true, message: 'Lütfen bilgisi giriniz...' }]}
+              >
+                <Input onChange={(e) => setChildAccount(e.target.value)} />
+              </Form.Item>
+              <Form.Item label={<label className="child-add-label">Aktarılacak Varlık Miktarı:</label>}
+                rules={[{ required: true, message: 'Devredilecek miktarı giriniz' }]}>
+                <Col>
+                  <Row>
+                    <InputNumber onChange={(e) => setDeliverAmount(+e.valueOf())} />
+                    <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px" }} onChange={(unit: UnitType) => { setSubmitUnit(unit) }}>
                       {units.map(unit => (<Option key={unit}>{unit}</Option>))}
-                  </Select>
-                </Row>
-              </Col>
-            </Form.Item>
-            <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: "center", paddingTop: "5%" }}>
-              <Popconfirm placement="bottom" title={text} onConfirm={handleChildAdd} okText="Evet" cancelText="Hayır">
-                <Button type="primary" htmlType="submit" >Kaydet</Button>
-              </Popconfirm>
-            </Form.Item>
-          </Form>
-        </Col>
-      </Row>
-    </>
-  );
+                    </Select>
+                  </Row>
+                </Col>
+              </Form.Item>
+              <Form.Item label={<label className="child-add-label">Devir Tarihi:</label>}
+                rules={[{ required: true, message: 'Geçerli bir devir tarihi giriniz' }]}
+              >
+                <DatePicker style={{width:"100%"}} onChange={(e) => setDeliverDate(e!.toDate())} />
+              </Form.Item >
+              <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: "center", paddingTop: "5%" }}>
+                <Popconfirm placement="bottom" title={text} onConfirm={handleChildAdd} okText="Evet" cancelText="Hayır">
+                  <Button id="child-add-btn" type="primary" htmlType="submit" >Kaydet</Button>
+                </Popconfirm>
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
+      </div>
+      </>
+      );
 };
 
-export default ChildAdd;
+      export default ChildAdd;
