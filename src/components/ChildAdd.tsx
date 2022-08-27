@@ -84,6 +84,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
     }
 
     if (typeof contract !== 'undefined') {
+
       contract.addChild(childAccount, childName, childSurname, (Math.floor(deliverDate?.getTime()/1000)), { value: sentValue})
       .then(async (res:any) => {
         await res.wait()

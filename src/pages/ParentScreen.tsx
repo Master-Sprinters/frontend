@@ -143,6 +143,7 @@ import { ethers } from 'ethers';
 
       const currentChildContent = [
         <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+          <div className="table-layout">
           <h5 id="parent-table-title">Çocuklar Tablosu</h5>
           <Table
             rowKey='key'
@@ -153,6 +154,7 @@ import { ethers } from 'ethers';
             size='small'
             pagination={{pageSize: 4}}
           />
+          </div>
         </div>
       ]
       setCurrentScreen(currentChildContent)
