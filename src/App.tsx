@@ -29,6 +29,7 @@ const App: FC = () => {
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer)
       
       const role = await contract.getRole(address)
+      
 
       console.log(role)
       setUserRole(role)

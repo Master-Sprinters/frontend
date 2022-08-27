@@ -181,9 +181,10 @@
 }
 
 #eth-logo {
-    position: relative;
-    top: 10vh;
+    position: absolute;
     width: 60%;
+    left: 10;
+    bottom: 10vh;
 }
 
 #eth-legacy-logo {
@@ -309,4 +310,9 @@
     font-weight: 500;
     font-size: 24px;
     line-height: 24px;
+}
+
+#key-icon {
+    width: 36px;
+    height: 36px;
 }
