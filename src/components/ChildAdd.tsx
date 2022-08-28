@@ -91,9 +91,10 @@ const ChildAdd: FC<Props> = ({ contract }) => {
           displaySuccesNotification('bottomRight')
         })
         .catch((err: any) => {
+          let result = `${err.reason}`.toString()
           notification['error']({
             message: `Çocuk ekleme başarısız.`,
-            description: `${err.reason}`
+            description: result.substring(result.indexOf("'")+1, (result.length)-1)
           });
         })
     }
