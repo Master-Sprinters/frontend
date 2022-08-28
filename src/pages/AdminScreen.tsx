@@ -211,8 +211,10 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
           dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
       }
 
-          currentChildren.push(element)
-          console.log(element.dueDate)
+      if (element.accountID.toString() !== ethers.constants.AddressZero) {
+        currentChildren.push(element)
+      }
+      console.log(element.dueDate)
     }
           //setData(currentParents)
           displayChildTable(currentChildren)

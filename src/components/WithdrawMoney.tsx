@@ -108,9 +108,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                 setBudget(addition)
                             })
                             .catch((err: any) => {
+                                let result = `${err.reason}`.toString()
                                 notification['error']({
-                                    message: `Para yatırma başarısız.`,
-                                    description: `${err.reason}`
+                                  message: `Çocuk düzenleme başarısız.`,
+                                  description: result.substring(result.indexOf("'")+1, (result.length)-1)
                                 });
                             })
                     }
@@ -125,9 +126,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                 setBudget(subtraction)
                             })
                             .catch((err: any) => {
+                                let result = `${err.reason}`.toString()
                                 notification['error']({
-                                    message: `Para çekme başarısız.`,
-                                    description: `${err.reason}`
+                                  message: `Çocuk düzenleme başarısız.`,
+                                  description: result.substring(result.indexOf("'")+1, (result.length)-1)
                                 });
                             })
                     }
@@ -149,9 +151,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
             }
 
         } catch (err: any) {
+            let result = `${err.reason}`.toString()
             notification['error']({
-                message: `Çocuk ekleme başarısız.`,
-                description: `${err.reason}`
+              message: `Çocuk düzenleme başarısız.`,
+              description: result.substring(result.indexOf("'")+1, (result.length)-1)
             });
         }
     }
@@ -171,9 +174,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                     setBudget("0")
                 })
                 .catch((err: any) => {
+                    let result = `${err.reason}`.toString()
                     notification['error']({
-                        message: `Para çekme başarısız.`,
-                        description: `${err.reason}`
+                      message: `Para çekme başarısız.`,
+                      description: result.substring(result.indexOf("'")+1, (result.length)-1)
                     });
                 })
             }
