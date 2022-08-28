@@ -1,23 +1,32 @@
-import { FC, useState } from "react";
-import { Layout, Menu, MenuProps } from "antd";
+import { FC, useEffect, useState } from "react";
+import { Col, Layout, Menu, MenuProps, Row } from "antd";
 import Key from "../images/Key.png"
 import Check from "../images/Check.png"
 import { AdvancedChart } from "react-tradingview-embed";
+import { ethers } from "ethers";
 
+interface ChildDataType {
+    amount: number;
+} 
 
-type PropsF = {
+type Props = {
     clientName: string;
     clientAddress: number;
+    connectProvider: () => Promise<{
+        role: any;
+        address: string;
+        contract: ethers.Contract;
+    } | undefined>;
 }
 
 const App = () => <AdvancedChart widgetProps={  
     {
-        "width": 980,
-        "height": 610,
+        "width": window.screen.width*0.5,
+        "height": window.screen.height*0.5,
         "symbol": "BINANCE:ETHTRY",
         "interval": "5",
         "timezone": "Europe/Istanbul",
-        "theme": "light",
+        "theme": "dark",
         "style": "3",
         "locale": "tr",
         "toolbar_bg": "#f1f3f6",
@@ -28,28 +37,56 @@ const App = () => <AdvancedChart widgetProps={
     }
 } />;
 
-const MainMenu: FC<PropsF> = ({clientName, clientAddress}) => {
+const MainMenu: FC<Props> = ({clientName, clientAddress, connectProvider}) => {
 
+    const [totalAmount, setTotalAmount] = useState("")
+
+    useEffect(() => {
+        connectChildren()
+    })
+
+    const connectChildren = async () => {
+        var totalAmount: number = 0
+        connectProvider().then(async (res) => {
+          res?.contract.getChildrenAsParent()
+          .then(async (childrenRes: any) => {
+            await childrenRes  
+            for (let i = 0; i < childrenRes.length; i++) {
+                totalAmount += Number(ethers.utils.formatEther(childrenRes[i][4]))
+            }           
+            setTotalAmount(totalAmount.toFixed(4).toString())
+          })
+        })   
+    }
+    
     return (
     <div key={1} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
         <div className="main-layout">
-            <h2 id="welcome-name">Hoş geldin {clientName}</h2>
+            <h2 id="welcome-name">Hoş geldin {clientName} </h2>
             <h5 id="address">
                 <img id="key-icon" src={Key} alt="key"/>
                 {clientAddress}
             </h5>
         </div>
-
-        <div className="main-text-box">
-            <p>
-                <img id="check-icon" src={Check} alt="check"/>
-                Çocuk Ekle sekmesinden dilediğiniz kadar çocuk tanımlayabilir ve istediğiniz tarihte çocuğunuza belirlediğiniz tutardaki varlığınızı aktarabilirsiniz.
-            </p>
-            <p>
-                <img id="check-icon" src={Check} alt="check"/>
-                Görüntüle / Değişiklik Yap sekmesinde çocuk bilgilerini görüntüleyebilirsiniz. Devredilecek varlık miktarına ekleme/çıkarma ve devir tarihi değişikliği yapabilirsiniz.
-            </p>
-        </div>
+        
+        <Row>
+            <Col span={8}>
+                <h5>{totalAmount}</h5>
+            </Col>
+            
+            <Col span={16}>
+                <div className="main-text-box">
+                    <p>
+                        <img id="check-icon" src={Check} alt="check"/>
+                        Çocuk Ekle sekmesinden dilediğiniz kadar çocuk tanımlayabilir ve istediğiniz tarihte çocuğunuza belirlediğiniz tutardaki varlığınızı aktarabilirsiniz.
+                    </p>
+                    <p>
+                        <img id="check-icon" src={Check} alt="check"/>
+                        Görüntüle / Değişiklik Yap sekmesinde çocuk bilgilerini görüntüleyebilirsiniz. Devredilecek varlık miktarına ekleme/çıkarma ve devir tarihi değişikliği yapabilirsiniz.
+                    </p>
+                </div>
+            </Col>
+        </Row>
 
         <div className="tradingview_b6f00">
             <App></App>
