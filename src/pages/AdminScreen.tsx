@@ -38,6 +38,8 @@ interface ChildDataType {
 
 const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
 
+  const [totalAmount, setTotalAmount] = useState("")
+
   const navigate = useNavigate()
 
   const redirectUser = async () => {
@@ -153,9 +155,9 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
               size='small'
               pagination={{ pageSize: 4 }}
             />
-            </div>
           </div>
-          ])
+        </div>
+      ])
   }
 
 
@@ -187,15 +189,29 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
 
     for (let i = 0; i < parentData.length; i++) {
       const element: ParentDataType = {
-            key: i,
-          name: parentData[i][1].concat(" ").concat(parentData[i][2]),
-          accountID: parentData[i][0],
+        key: i,
+        name: parentData[i][1].concat(" ").concat(parentData[i][2]),
+        accountID: parentData[i][0],
       }
+      currentParents.push(element)
 
-          currentParents.push(element)
+      var currAmount: number = 0
+      
+      connectProvider().then(async (res) => {
+        res?.contract.getChildren(parentData[i][0])
+        .then(async (childrenRes: any) => {
+          await childrenRes  
+          for (let i = 0; i < childrenRes.length; i++) {
+            currAmount += Number(ethers.utils.formatEther(childrenRes[i][4]))
+          }           
+          setTotalAmount(currAmount.toFixed(4).toString())
+        })
+      })
     }
-          setData(currentParents)
-          displayParentTable(currentParents)
+
+    setData(currentParents)
+    displayParentTable(currentParents)
+    console.log("total amount :" + totalAmount)
   }
 
   //assigns the given array parameter to current parents variable to be used
@@ -222,18 +238,17 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
 
   //gets the parent list from backend and calls assign parents function with retrieved data
   const connectParents = async () => {
-
-            let parentsRes
-
-          if (typeof contract !== 'undefined') {
-            parentsRes = await contract.getAllParents()
+    let parentsRes
+    if (typeof contract !== 'undefined') {
+      parentsRes = await contract.getAllParents()
       assginParents(parentsRes)
-    } else {
-            connectProvider().then(async (res) => {
-              parentsRes = await res?.contract.getAllParents()
-              assginParents(parentsRes)
-            })
-          }
+    }
+    else {
+      connectProvider().then(async (res) => {
+        parentsRes = await res?.contract.getAllParents()
+        assginParents(parentsRes)
+      })
+    }
   }
 
   //gets the child list from backend and calls assign getChildren function with retrieved data
@@ -265,13 +280,13 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
 
   //displays different content according to the selected item on sidebar
   const handleCurrentScreen = (e: MenuItem) => {
-            console.log(e?.key)
+    console.log(e?.key)
     if (e?.key === '1') {
-            connectParents()
-          } else if (e?.key === '2') {
-            navigate("/")
-            //exit
-          }
+      connectParents()
+    } else if (e?.key === '2') {
+      navigate("/")
+      //exit
+    }
   }
 
           return (
