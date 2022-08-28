@@ -65,7 +65,7 @@ const LoginScreen: FC<Props> = ({ userRole, connectProvider }) => {
     ]
 
     return (
-        <div style={{ overflowY: "scroll", height: "100vh" }}>
+        <div id="login-wrapper">
             <div className="image-wrapper"><img id="login-top-img" src={LoginTop} alt="loginTop" /></div>
             <Row justify="center" align="middle">
                 <Col span={12} style={{ textAlign: "center" }}>
