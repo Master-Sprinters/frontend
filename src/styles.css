@@ -11,15 +11,22 @@
 }
 
 .child-header {
-    font-family: 'Roboto';
+    font-family: 'Helvetica';
     font-style: normal;
-    font-weight: 600;
-    font-size: 24px;
-    color: rgba(0, 0, 0, 0.85);
+    font-weight: 700;
+    font-size: 32px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.edit-form {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    width: 50vw;
+    margin: auto;
 }
 
 .child-text {
-    font-family: 'Roboto';
+    font-family: 'Helvetica';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -27,7 +34,7 @@
 }
 
 .child-left-text {
-    font-family: 'Roboto';
+    font-family: 'Helvetica';
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -144,8 +151,6 @@
     padding-left: 5vw;
 }
 
-#register-name-label {}
-
 #register-btn {
     width: 280px;
     height: 80px;
@@ -193,9 +198,9 @@
 
 #smart-contract-img {
     position: relative;
-    margin-top: 5%;
-    height: 65vh;
+    margin-top: 5vh;
     border-radius: 30px;
+    height: 70vh;
 }
 
 #eth-legacy-logo {
@@ -209,8 +214,10 @@
 .login-left {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 0 30px 30px 0;
+    margin-top: 5vh;
     text-align: left;
-    height: 65vh;
+    height: 70vh;
+    overflow-x: auto;
 }
 
 .login-left-title {
@@ -220,7 +227,6 @@
     font-size: 48px;
     color: #000000;
     margin: 5%;
-    padding-top: 5%;
 }
 
 .login-left-description {
@@ -317,16 +323,58 @@ border-color: #5C2CA4; */
     border-radius: 0 30px 0 0;
 }
 
+.ant-table {
+    background: none !important;
+}
+
+.ant-empty-normal:hover {
+    background: unset !important;
+}
+
+.ant-table-tbody>tr>td {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.ant-table-tbody>tr>td:hover {
+    background-color: unset !important;
+}
+
+.ant-table-cell-row-hover {
+    background-color: unset !important;
+}
+
+.ant-table-thead>tr>th {
+    background-color: #fafafa !important;
+}
+
+.ant-table-cell-fix-right {
+    background-color: unset !important;
+}
+
+td.ant-table-column-sort {
+    background: none !important;
+}
+
 .ant-layout-sider {
     border-radius: 0 30px 30px 0;
-    background: rgba(255, 255, 255, 0.1) !important;
     background: none !important;
 }
 
 .ant-layout-sider-trigger {
     border-radius: 0 0 30px 0;
-    background: none !important;
     background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-layout-sider-collapsed {
+    background: none !important;
+}
+
+.ant-menu.ant-menu-inline-collapsed {
+    background: none !important;
+}
+
+.ant-menu-vertical {
+    border-right: 0cm !important;
 }
 
 .ant-layout {
@@ -344,7 +392,7 @@ border-color: #5C2CA4; */
 .table-layout {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 30px;
-    margin-top: 10%;
+    margin-top: 8%;
 }
 
 .child-add-form {

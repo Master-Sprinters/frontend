@@ -215,7 +215,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
         }
 
         return (
-            <Row justify="center" className="child-header" style={{ paddingTop: "75px", paddingBottom: "50px", paddingRight: padding }}>
+            <Row justify="center" className="child-header" style={{ paddingTop: "40px", paddingBottom: "40px", paddingRight: padding }}>
                 {title}
             </Row>
         )
@@ -225,7 +225,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
         return (
             <Form.Item
                 label={<div className="child-left-text"> {leftStr} </div>}
-                labelAlign="right"
             >
                 <div className="child-text"> {rightStr} </div>
             </Form.Item>
@@ -242,21 +241,22 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     }
 
     const formLayout = {
-        labelCol: { span: 11 },
-        wrapperCol: { span: 13 },
+        labelCol: { span: 8 },
+        wrapperCol: { span: 16 },
     };
 
     //desing
     return (
         <div>
             {getTitle()}
-
+            <div className="edit-form">
             <Form {...formLayout}
                 form={form}
                 initialValues={{ remember: true }}
                 autoComplete="off"
                 colon={false}
             >
+                <br></br>
 
                 {getRow("İsim Soyisim :", name)}
                 {getRow("Hesap ID :", accId)}
@@ -318,17 +318,18 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 }
 
                 <Form.Item
-                    wrapperCol={{ ...formLayout.wrapperCol, offset: 11 }}
-                    style={{ paddingTop: btnParams.padding }}
+                    wrapperCol={{ ...formLayout.wrapperCol, offset: 7 }}
+                    style={{ paddingTop: btnParams.padding, paddingBottom:"5%" }}
                 >
-                    <Button id={btnParams.id} onClick={btnParams.onClick} type="primary"
-                        className="std-button" style={{ width: btnParams.width, height: btnParams.height }}>
+                    <Button id="child-add-btn" onClick={btnParams.onClick} type="primary"
+                        className="child-add-btn">
                         {btnParams.text}
                     </Button>
 
                 </Form.Item>
 
             </Form>
+            </div>       
         </div>
     );
 }

@@ -143,18 +143,19 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
     setCurrentScreen(
       [
         <div key={1} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-          <h5 id="parent-table-title">Ebeveynler Tablosu</h5>
-          <Table
-            rowKey='key'
-            style={{ width: "80%", textAlign: "center", paddingLeft: "20%" }}
-            columns={columns}
-            dataSource={tableData}
-            onChange={onChange}
-            size='small'
-            pagination={{pageSize: 4}}
-          />
-        </div>
-      ])
+          <div className="table-layout">
+            <h5 id="parent-table-title">Ebeveynler Tablosu</h5>
+            <Table
+              rowKey='key'
+              columns={columns}
+              dataSource={tableData}
+              onChange={onChange}
+              size='small'
+              pagination={{ pageSize: 4 }}
+            />
+            </div>
+          </div>
+          ])
   }
 
 
@@ -162,20 +163,22 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
   const displayChildTable = (tableData: ChildDataType[]) => {
 
     const currentChildContent = [
-      <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-        <h5 id="parent-table-title">Çocuklar Tablosu</h5>
-        <Table
-          rowKey='key'
-          style={{ textAlign: "center" }}
-          columns={childColumns}
-          dataSource={tableData}
-          onChange={onChangeChild}
-          size='small'
-          pagination={{pageSize: 4}}
-        />
-      </div>
-    ]
-    setCurrentScreen(currentChildContent)
+          <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+            <div className="table-layout">
+              <h5 id="parent-table-title">Çocuklar Tablosu</h5>
+              <Table
+                rowKey='key'
+                style={{ textAlign: "center" }}
+                columns={childColumns}
+                dataSource={tableData}
+                onChange={onChangeChild}
+                size='small'
+                pagination={{ pageSize: 4 }}
+              />
+            </div>
+          </div>
+          ]
+          setCurrentScreen(currentChildContent)
   }
 
   //assigns the given array parameter to current parents variable to be used
@@ -184,15 +187,15 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
 
     for (let i = 0; i < parentData.length; i++) {
       const element: ParentDataType = {
-        key: i,
-        name: parentData[i][1].concat(" ").concat(parentData[i][2]),
-        accountID: parentData[i][0],
+            key: i,
+          name: parentData[i][1].concat(" ").concat(parentData[i][2]),
+          accountID: parentData[i][0],
       }
 
-      currentParents.push(element)
+          currentParents.push(element)
     }
-    setData(currentParents)
-    displayParentTable(currentParents)
+          setData(currentParents)
+          displayParentTable(currentParents)
   }
 
   //assigns the given array parameter to current parents variable to be used
@@ -201,11 +204,11 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
 
     for (let i = 0; i < childrenData.length; i++) {
       const element: ChildDataType = {
-        key: i,
-        name: childrenData[i][1].concat(" ").concat(childrenData[i][2]),
-        accountID: childrenData[i][0],
-        amount: Number(childrenData[i][4].toHexString())/(Math.pow(10,18)),
-        dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
+            key: i,
+          name: childrenData[i][1].concat(" ").concat(childrenData[i][2]),
+          accountID: childrenData[i][0],
+          amount: Number(childrenData[i][4].toHexString())/(Math.pow(10,18)),
+          dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
       }
 
       if (element.accountID.toString() !== ethers.constants.AddressZero) {
@@ -213,69 +216,69 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
       }
       console.log(element.dueDate)
     }
-    //setData(currentParents)
-    displayChildTable(currentChildren)
+          //setData(currentParents)
+          displayChildTable(currentChildren)
   }
 
   //gets the parent list from backend and calls assign parents function with retrieved data
   const connectParents = async () => {
 
-    let parentsRes
+            let parentsRes
 
-    if (typeof contract !== 'undefined') {
-      parentsRes = await contract.getAllParents()
+          if (typeof contract !== 'undefined') {
+            parentsRes = await contract.getAllParents()
       assginParents(parentsRes)
     } else {
-      connectProvider().then(async (res) => {
-        parentsRes = await res?.contract.getAllParents()
-        assginParents(parentsRes)
-      })
-    }
+            connectProvider().then(async (res) => {
+              parentsRes = await res?.contract.getAllParents()
+              assginParents(parentsRes)
+            })
+          }
   }
 
   //gets the child list from backend and calls assign getChildren function with retrieved data
   const connectChildren = async (row:any) => {
 
-    let childrenRes
+            let childrenRes
 
-    if (typeof contract !== 'undefined') {
-      childrenRes = await contract.getChildren(row.accountID)
+          if (typeof contract !== 'undefined') {
+            childrenRes = await contract.getChildren(row.accountID)
       assignChildren(childrenRes)
     } else {
-      connectProvider().then(async (res) => {
-        childrenRes = await res?.contract.getChildren(row.accountID)
-        assignChildren(childrenRes)
-      })
-    }
+            connectProvider().then(async (res) => {
+              childrenRes = await res?.contract.getChildren(row.accountID)
+              assignChildren(childrenRes)
+            })
+          }
   }
 
   useEffect(() => {
-    //Runs only on the first render, calls parent table from backend
-    connectParents()
+            //Runs only on the first render, calls parent table from backend
+            connectParents()
 
-  }, []);
+          }, []);
 
-  const items: MenuItem[] = [
-    getItem('Ebeveyn Tablosu', '1', <TeamOutlined />),
-    getItem('Çıkış', '2', <LogoutOutlined />),
-  ];
+          const items: MenuItem[] = [
+          getItem('Ebeveyn Tablosu', '1', <TeamOutlined />),
+          getItem('Çıkış', '2', <LogoutOutlined />),
+          ];
 
   //displays different content according to the selected item on sidebar
   const handleCurrentScreen = (e: MenuItem) => {
-    console.log(e?.key)
+            console.log(e?.key)
     if (e?.key === '1') {
-      connectParents()
-    } else if (e?.key === '2') {
-      navigate("/")
-      //exit
-    }
+            connectParents()
+          } else if (e?.key === '2') {
+            navigate("/")
+            //exit
+          }
   }
 
-  return (
-    <>
-      <SiteLayout child={currentScreen} menuItems={items} handleContent={handleCurrentScreen} />
-    </>
-  );
+          return (
+          <>
+            <SiteLayout child={currentScreen} menuItems={items} handleContent={handleCurrentScreen} />
+          </>
+          );
 }
 
-export default AdminScreen;
+          export default AdminScreen;

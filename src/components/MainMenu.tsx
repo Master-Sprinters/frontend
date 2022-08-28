@@ -19,7 +19,8 @@ type Props = {
     } | undefined>;
 }
 
-const App = () => <AdvancedChart widgetProps={  
+const App = () => <AdvancedChart widgetProps={
+
     {
         "width": window.screen.width*0.5,
         "height": window.screen.height*0.5,
