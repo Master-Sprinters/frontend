@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Layout, Menu, MenuProps } from "antd";
 import EthLogo from "../images/EthLogo.png"
 import EthMiras from "../images/EtherMiras.png"
@@ -26,16 +26,26 @@ type Props = {
 const SiteLayout: FC<Props> = ({ child, menuItems, handleContent }) => {
 
     const [collapsed, setCollapsed] = useState(false);
+    const [padLeft, setPadLeft] = useState("250px");
     const { Content, Sider } = Layout;
+
+    useEffect(() => {
+        
+        if(collapsed){
+            setPadLeft("80px")
+        }else{
+            setPadLeft("250px")
+        }
+      });
 
     return (
         <Layout className="content" style={{ minHeight: '100vh' }}>
-            <Sider width="250px" collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
+            <Sider style={{height:"100vh", position:"fixed"}} width="250px" collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
             <div className="image-wrapper"><img id="eth-legacy-logo" src={EthMiras} alt="eth"/></div>
                 <Menu onClick={handleContent} defaultSelectedKeys={['1']} mode="inline" items={menuItems} />
                 <div className="image-wrapper"><img id="eth-logo" src={EthLogo} alt="eth"/></div>
             </Sider>
-            <Layout className="site-layout">
+            <Layout className="site-layout" style={{paddingLeft:padLeft, transition:"all .2s"}}>
                 <Content >
                     {child}
                 </Content>
