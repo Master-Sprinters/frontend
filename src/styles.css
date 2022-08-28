@@ -144,9 +144,7 @@
     padding-left: 5vw;
 }
 
-#register-name-label {
-
-}
+#register-name-label {}
 
 #register-btn {
     width: 280px;
@@ -251,6 +249,7 @@
     box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.1);
 }
 
+
 /* justify-content: center;
 align-items: center;
 background: #5C2CA4;
@@ -278,6 +277,15 @@ border-color: #5C2CA4; */
     background-image: url("./images/LoginBottom.svg");
     background-size: 100% 100%;
     height: 135vh;
+}
+
+#login-wrapper {
+    background-image: url("./images/LoginBackground.png");
+    height: 100vh;
+    background-size: 100vw 100%;
+    background-attachment: local;
+    overflow-y: scroll;
+    object-fit: contain;
 }
 
 .ant-menu {
