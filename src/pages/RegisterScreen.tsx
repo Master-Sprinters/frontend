@@ -73,15 +73,16 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
         onFinish={handleRegister}
         //onFinishFailed={onFinishFailed}
         autoComplete="off"
+        requiredMark={false}
       >
         <h5 className="register-header" >Kayıt Ol</h5>
-        <p className="register-description">Ether Miras’a hoşgeldin, isim ve soyadını gir ve siteyi kullanmaya başla</p>
+        <p className="register-description">Ether Miras’a hoş geldin, isim ve soyadını gir ve siteyi kullanmaya başla</p>
         <Form.Item
           label={ 
             <p className="register-name-label">İsim</p>
             }
           name="name"
-          rules={[{ required: true, message: 'İsminizi ve Soy İsminizi giriniz...' }]}
+          rules={[{ required: true, message: 'Lütfen isminizi giriniz.' }]}
         >
           <Input size="large" style={{ borderRadius:"10px"}} onChange={(e) => setName(e.target.value)} />
         </Form.Item>
@@ -90,7 +91,7 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
           label={ 
             <p className="register-name-label">Soyad</p>
             }
-          rules={[{ required: true, message: 'İsminizi ve Soy İsminizi giriniz...' }]}
+          rules={[{ required: true, message: 'Lütfen soyadınızı giriniz.' }]}
         >
           <Input size="large" style={{ borderRadius:"10px"}} onChange={(e) => setSurname(e.target.value)} />
         </Form.Item>
@@ -102,7 +103,7 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
       </Form>
       </Col>
       <Col className="register-right" span={12} >
-        <h5 className="register-welcome">Ether Mirasa Hoşgeldiniz</h5>
+        <h5 className="register-welcome">Ether Miras'a Hoş Geldiniz</h5>
         <p className="register-welcome-description"> Kişiselleştirilmiş, kullanımı kolay ve güvenli.</p>
         <p className="register-welcome-description"> Çocuklarının geleceğine yatırım yapmak için ve platformun tüm  fonksiyonlarına 
 erişmek için şimdi kaydol.</p>

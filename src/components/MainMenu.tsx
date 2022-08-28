@@ -40,7 +40,7 @@ const MainMenu: FC<PropsF> = ({clientName, clientAddress}) => {
             </h5>
         </div>
 
-        <div className="text-box">
+        <div className="main-text-box">
             <p>
                 <img id="check-icon" src={Check} alt="check"/>
                 Çocuk Ekle sekmesinden dilediğiniz kadar çocuk tanımlayabilir ve istediğiniz tarihte çocuğunuza belirlediğiniz tutardaki varlığınızı aktarabilirsiniz.

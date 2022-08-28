@@ -74,7 +74,7 @@
 .register-header {
     padding-left: 25%;
     font-size: 44px;
-    font: Roboto;
+    font: 'Helvetica' !important;
     font-weight: 400;
     line-height: 46%;
 }
@@ -82,7 +82,7 @@
 .register-description {
     padding-left: 25%;
     width: 80%;
-    font: Roboto;
+    font: 'Helvetica';
     font-style: normal;
     font-weight: 300;
     font-size: 16px;
@@ -144,6 +144,26 @@
     padding-left: 5vw;
 }
 
+#register-name-label {
+
+}
+
+#register-btn {
+    width: 280px;
+    height: 80px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    font: Roboto;
+    color: #FFFFFF;
+    background: #5C2CA4;
+    border-radius: 30px;
+    text-align: center;
+    margin: 5%;
+    border-color: #5C2CA4;
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
 #parent-table-title {
     text-align: center;
     font-style: normal;
@@ -199,14 +219,14 @@
     font: Helvetica;
     font-style: normal;
     font-weight: 400;
-    font-size: 44px;
+    font-size: 48px;
     color: #000000;
     margin: 5%;
     padding-top: 5%;
 }
 
 .login-left-description {
-    font: Helvetica;
+    font-family: sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
@@ -225,8 +245,28 @@
     color: #FFFFFF;
     background: #5C2CA4;
     border-radius: 30px;
+    text-align: center;
     margin: 5%;
+    border-color: #5C2CA4;
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.1);
 }
+
+/* justify-content: center;
+align-items: center;
+background: #5C2CA4;
+box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.1);
+border-radius: 30px;
+width: 20vw;
+height: 5vw;
+font: Roboto;
+font-style: normal;
+font-weight: 400;
+font-size: 24px;
+line-height: 24px;
+
+text-align: center;
+color: #FFFFFF;
+border-color: #5C2CA4; */
 
 #login-top-img {
     width: 100%;

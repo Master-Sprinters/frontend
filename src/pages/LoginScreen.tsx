@@ -59,7 +59,7 @@ const LoginScreen: FC<Props> = ({ userRole, connectProvider }) => {
     const loginButton = [
 
         <Button id="login-btn" type="primary" htmlType="submit" onClick={handleLogin}>
-            BAŞLA
+            Başla
         </Button>
 
     ]
@@ -72,13 +72,13 @@ const LoginScreen: FC<Props> = ({ userRole, connectProvider }) => {
                     <div className="login-left">
                         <h5 className="login-left-title">MetaMask İle Bağlanın;</h5>
                         <p className="login-left-description">
-                            MetaMask Ethereum blok zinciri ile etkileşim kurmak için
+                            MetaMask, Ethereum blok zinciri ile etkileşim kurmak için
                             kullanılan bir kripto para cüzdanıdır. Metamask cüzdan kullanmak
-                            için, Chrome, Firefox, Edge veya Brave gibi Chromium tabanlı bir web
+                            için, Chrome veya Firefox gibi Chromium tabanlı bir web
                             tarayıcısı gereklidir. Metamask cüzdan ile size özel tanımlanmış private
-                            key sayesinde sitemize tek tıkla üye olabilir ve kayıt yapabilirsiniz.
-                            Sitemiz üzerinden MetaMask cüzdanınızdaki kripto para varlıkları ile smart
-                            contract oluşturabilirsiniz.
+                            key sayesinde sitemize tek tıkla kayıt yapabilirsiniz.
+                            Sitemiz üzerinden MetaMask cüzdanınızdaki ETH ile smart
+                            işlem oluşturabilirsiniz.
                         </p>
                         {loginButton}
                     </div>
