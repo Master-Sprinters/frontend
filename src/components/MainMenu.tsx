@@ -10,14 +10,15 @@ type PropsF = {
     clientAddress: number;
 }
 
-const App = () => <AdvancedChart widgetProps={  
+const App = () => <AdvancedChart widgetProps={
+
     {
-        "width": 980,
-        "height": 610,
+        "width": window.screen.width*0.5,
+        "height": window.screen.height*0.5,
         "symbol": "BINANCE:ETHTRY",
         "interval": "5",
         "timezone": "Europe/Istanbul",
-        "theme": "light",
+        "theme": "dark",
         "style": "3",
         "locale": "tr",
         "toolbar_bg": "#f1f3f6",
