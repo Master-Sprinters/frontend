@@ -74,7 +74,7 @@
 .register-header {
     padding-left: 25%;
     font-size: 44px;
-    font: 'Helvetica' !important;
+    font-family: 'Helvetica' !important;
     font-weight: 400;
     line-height: 46%;
 }
@@ -82,7 +82,7 @@
 .register-description {
     padding-left: 25%;
     width: 80%;
-    font: 'Helvetica';
+    font-family: 'Helvetica';
     font-style: normal;
     font-weight: 300;
     font-size: 16px;
@@ -216,9 +216,9 @@
 }
 
 .login-left-title {
-    font: Helvetica;
+    font: 'Roboto';
     font-style: normal;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 48px;
     color: #000000;
     margin: 5%;
@@ -226,7 +226,7 @@
 }
 
 .login-left-description {
-    font-family: sans-serif;
+    font-family: 'Noto Sans', 'Helvetica';
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
