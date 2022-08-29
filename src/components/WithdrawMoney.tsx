@@ -270,11 +270,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                 <Row>
                                     <InputNumber
                                         id="transfer-amount" min={0}
-                                        style={{ width: "140px" }}
+                                        style={{ width: "140px", borderRadius: "10px" }}
                                         defaultValue={0}
                                         onChange={(e) => e != null ? onBudgetChange(+e.valueOf()) : onBudgetChange(0)}
                                     />
-                                    <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px" }}
+                                    <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px", borderRadius: "10px" }}
                                         onChange={(unit: UnitType) => { setSubmitUnit(unit) }}
                                     >
                                         {units.map(unit => (
@@ -283,15 +283,15 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                     </Select>
                                 </Row>
                                 <Row style={{ paddingTop: "10px" }}>
-                                    <Radio.Group style={{ width: "140px" }}>
+                                    <Radio.Group style={{ width: "140px"}}>
                                         <Radio.Button
-                                            style={{ color: "black", backgroundColor: leftRadioClicked ? clickedRadioColor : "", width: "70px" }}
+                                            style={{ color: "black", backgroundColor: leftRadioClicked ? clickedRadioColor : "", width: "70px", borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", borderColor:"white" }}
                                             value="large" onClick={() => { setleftRadioClicked(true) }}
                                         >
                                             Ekle
                                         </Radio.Button>
                                         <Radio.Button
-                                            style={{ color: "black", backgroundColor: leftRadioClicked ? "" : clickedRadioColor, width: "70px" }}
+                                            style={{ color: "black", backgroundColor: leftRadioClicked ? "":clickedRadioColor, width: "70px", borderTopRightRadius: "10px", borderBottomRightRadius: "10px", borderColor:"white" }}
                                             value="large" onClick={() => { setleftRadioClicked(false) }}
                                         >
                                             Çıkar
@@ -307,8 +307,8 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                         >
                             <DatePicker id="transfer-date"
                                 defaultValue={moment(transferDate)}
-                                allowClear={false} style={{ width: "140px" }}
-                                onChange={(e: any, dateString: string) => onDateChange(e, dateString)}
+                                allowClear={false} style={{ width: "140px", borderRadius:"10px" }}
+                                onChange={(e: any, dateString: string) => onDateChange(e, dateString)}   
                             />
                         </Form.Item>
                     </div>
