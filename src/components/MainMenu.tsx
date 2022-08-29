@@ -1,13 +1,9 @@
 import { FC, useEffect, useState } from "react";
-import { Col, Layout, Menu, MenuProps, Row } from "antd";
+import { Col, Row } from "antd";
 import Key from "../images/Key.png"
 import Check from "../images/Check.png"
 import { AdvancedChart } from "react-tradingview-embed";
 import { ethers } from "ethers";
-
-interface ChildDataType {
-    amount: number;
-} 
 
 type Props = {
     clientName: string;

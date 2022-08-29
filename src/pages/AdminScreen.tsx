@@ -9,11 +9,10 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { BigNumber, ethers } from 'ethers';
+import { useNavigate } from 'react-router-dom';
+import { ethers } from 'ethers';
 
 type Props = {
-  address: string;
   connectProvider: () => Promise<{
     role: any;
     address: string;
@@ -36,39 +35,11 @@ interface ChildDataType {
   dueDate: string;
 }
 
-const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
+const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
 
   const [totalAmount, setTotalAmount] = useState("")
 
   const navigate = useNavigate()
-
-  const redirectUser = async () => {
-
-    if (typeof contract !== 'undefined') {
-
-      const role = await contract.getRole(address)
-      if (role !== 0) {//redirect to login page if role is not admin
-        navigate("/")
-        window.location.reload();
-      }
-    }
-
-  }
-
-  useEffect(() => {
-    //direct the user to login page if adress changes
-
-    //@ts-ignore
-    const metaMaskProvider = window.ethereum
-    if (metaMaskProvider) {
-      metaMaskProvider.on("accountsChanged", () => {
-        connectProvider()
-        navigate("/")
-        window.location.reload();
-      });
-      redirectUser()
-    }
-  });
 
   const childColumns: ColumnsType<ChildDataType> = [
     {
@@ -165,27 +136,27 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
   const displayChildTable = (tableData: ChildDataType[]) => {
 
     const currentChildContent = [
-          <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-            <div className="table-layout">
-              <h5 id="parent-table-title">Çocuklar Tablosu</h5>
-              <Table
-                rowKey='key'
-                style={{ textAlign: "center" }}
-                columns={childColumns}
-                dataSource={tableData}
-                onChange={onChangeChild}
-                size='small'
-                pagination={{ pageSize: 4 }}
-              />
-            </div>
-          </div>
-          ]
-          setCurrentScreen(currentChildContent)
+      <div key={2} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+        <div className="table-layout">
+          <h5 id="parent-table-title">Çocuklar Tablosu</h5>
+          <Table
+            rowKey='key'
+            style={{ textAlign: "center" }}
+            columns={childColumns}
+            dataSource={tableData}
+            onChange={onChangeChild}
+            size='small'
+            pagination={{ pageSize: 4 }}
+          />
+        </div>
+      </div>
+    ]
+    setCurrentScreen(currentChildContent)
   }
 
   //assigns the given array parameter to current parents variable to be used
   //on displayParentTable function 
-  const assginParents = (parentData:any) => {
+  const assginParents = (parentData: any) => {
 
     for (let i = 0; i < parentData.length; i++) {
       const element: ParentDataType = {
@@ -196,16 +167,16 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
       currentParents.push(element)
 
       var currAmount: number = 0
-      
+
       connectProvider().then(async (res) => {
         res?.contract.getChildren(parentData[i][0])
-        .then(async (childrenRes: any) => {
-          await childrenRes  
-          for (let i = 0; i < childrenRes.length; i++) {
-            currAmount += Number(ethers.utils.formatEther(childrenRes[i][4]))
-          }           
-          setTotalAmount(currAmount.toFixed(4).toString())
-        })
+          .then(async (childrenRes: any) => {
+            await childrenRes
+            for (let i = 0; i < childrenRes.length; i++) {
+              currAmount += Number(ethers.utils.formatEther(childrenRes[i][4]))
+            }
+            setTotalAmount(currAmount.toFixed(4).toString())
+          })
       })
     }
 
@@ -216,15 +187,15 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
 
   //assigns the given array parameter to current parents variable to be used
   //on displayParentTable function 
-  const assignChildren = (childrenData:any) => {
+  const assignChildren = (childrenData: any) => {
 
     for (let i = 0; i < childrenData.length; i++) {
       const element: ChildDataType = {
-            key: i,
-          name: childrenData[i][1].concat(" ").concat(childrenData[i][2]),
-          accountID: childrenData[i][0],
-          amount: Number(childrenData[i][4].toHexString())/(Math.pow(10,18)),
-          dueDate: new Date(Number(childrenData[i][3].toHexString())).toDateString(),
+        key: i,
+        name: childrenData[i][1].concat(" ").concat(childrenData[i][2]),
+        accountID: childrenData[i][0],
+        amount: Number(childrenData[i][4].toHexString()) / (Math.pow(10, 18)),
+        dueDate: new Date(Number(childrenData[i][3].toHexString()) * 1000).toDateString(),
       }
 
       if (element.accountID.toString() !== ethers.constants.AddressZero) {
@@ -232,8 +203,8 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
       }
       console.log(element.dueDate)
     }
-          //setData(currentParents)
-          displayChildTable(currentChildren)
+    //setData(currentParents)
+    displayChildTable(currentChildren)
   }
 
   //gets the parent list from backend and calls assign parents function with retrieved data
@@ -252,31 +223,30 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
   }
 
   //gets the child list from backend and calls assign getChildren function with retrieved data
-  const connectChildren = async (row:any) => {
+  const connectChildren = async (row: any) => {
 
-            let childrenRes
+    let childrenRes
 
-          if (typeof contract !== 'undefined') {
-            childrenRes = await contract.getChildren(row.accountID)
+    if (typeof contract !== 'undefined') {
+      childrenRes = await contract.getChildren(row.accountID)
       assignChildren(childrenRes)
     } else {
-            connectProvider().then(async (res) => {
-              childrenRes = await res?.contract.getChildren(row.accountID)
-              assignChildren(childrenRes)
-            })
-          }
+      connectProvider().then(async (res) => {
+        childrenRes = await res?.contract.getChildren(row.accountID)
+        assignChildren(childrenRes)
+      })
+    }
   }
 
   useEffect(() => {
-            //Runs only on the first render, calls parent table from backend
-            connectParents()
+    //Runs only on the first render, calls parent table from backend
+    connectParents()
+  }, []);
 
-          }, []);
-
-          const items: MenuItem[] = [
-          getItem('Ebeveyn Tablosu', '1', <TeamOutlined />),
-          getItem('Çıkış', '2', <LogoutOutlined />),
-          ];
+  const items: MenuItem[] = [
+    getItem('Ebeveyn Tablosu', '1', <TeamOutlined />),
+    getItem('Çıkış', '2', <LogoutOutlined />),
+  ];
 
   //displays different content according to the selected item on sidebar
   const handleCurrentScreen = (e: MenuItem) => {
@@ -289,11 +259,11 @@ const AdminScreen: FC<Props> = ({ address, connectProvider, contract }) => {
     }
   }
 
-          return (
-          <>
-            <SiteLayout child={currentScreen} menuItems={items} handleContent={handleCurrentScreen} />
-          </>
-          );
+  return (
+    <>
+      <SiteLayout child={currentScreen} menuItems={items} handleContent={handleCurrentScreen} />
+    </>
+  );
 }
 
-          export default AdminScreen;
+export default AdminScreen;

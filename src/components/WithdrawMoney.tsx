@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FunctionComponent } from "react";
-import { Button, Form, InputNumber, DatePicker, Select, Row, Col, message, Radio, Popconfirm } from "antd";
+import { Button, Form, InputNumber, DatePicker, Select, Row, Col, Radio } from "antd";
 import moment from "moment";
 import "../styles.css"
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import notification, { NotificationPlacement } from "antd/lib/notification";
 import { parseUnits, parseEther } from "ethers/lib/utils";
 
@@ -53,7 +53,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     const clickedRadioColor = "#40A9FF"
 
     const [newBudget, setNewBudget] = useState<number>(0);
-    const [displayBudget, setDisplayBudget] = useState<string>(budget)
     const [newDate, setNewDate] = useState<Date>(new Date(0))
     var [submitUnit, setSubmitUnit] = useState<UnitType>("Ether")
 
@@ -65,8 +64,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
             placement,
         });
     };
-
-    let zeroDate: Date = new Date(0);
 
     //button onClickmethods
     const onClickSave = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {

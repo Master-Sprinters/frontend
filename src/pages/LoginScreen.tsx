@@ -1,38 +1,19 @@
-import React, { useEffect, useState } from "react";
-import MasterPicture from "../images/Master.jpeg"
-import { Button, Input, Form, message } from 'antd';
+import { useEffect } from "react";
+import { Button } from 'antd';
 import { FC } from "react";
 import { Col, Row } from 'antd';
 import "../styles.css"
 import { useNavigate } from "react-router-dom";
-import { ethers } from "ethers";
 import SmartContractPic from "../images/SmartContract.jpg"
-import LoginBottom from "../images/LoginBottom.svg"
 import LoginTop from "../images/LoginTop.svg"
 
 type Props = {
     userRole: number;
-    connectProvider: () => void;
 }
 
-const LoginScreen: FC<Props> = ({ userRole, connectProvider }) => {
+const LoginScreen: FC<Props> = ({ userRole }) => {
 
     const navigate = useNavigate()
-
-    useEffect(() => {
-        //Runs when the given parameter is updated
-        //direct the user to login page if adress changes
-
-        //@ts-ignore
-        const metaMaskProvider = window.ethereum
-        if (metaMaskProvider) {
-            metaMaskProvider.on("accountsChanged", () => {
-                connectProvider()
-                window.location.reload();
-
-            });
-        }
-    });
 
     const handleLogin = async () => {
 
@@ -58,7 +39,7 @@ const LoginScreen: FC<Props> = ({ userRole, connectProvider }) => {
 
     const loginButton = [
 
-        <Button id="login-btn" type="primary" htmlType="submit" onClick={handleLogin}>
+        <Button key={10} id="login-btn" type="primary" htmlType="submit" onClick={handleLogin}>
             Başla
         </Button>
 

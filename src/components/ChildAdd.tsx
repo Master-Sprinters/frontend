@@ -10,9 +10,9 @@ import {
   notification,
   Select,
 } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FC } from 'react';
-import { ethers, utils } from "ethers";
+import { ethers } from "ethers";
 import 'antd/dist/antd.min.css';
 import "../styles.css"
 import type { NotificationPlacement } from 'antd/es/notification';

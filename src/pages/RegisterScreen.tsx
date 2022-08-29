@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import MasterPicture from "../images/Master.jpeg"
-import RegisterBackground from "../images/RegisterBackground.png"
+import { useEffect } from "react";
 import { Button, Input, Form, message } from 'antd';
 import { FC } from "react";
 import { Col, Row } from 'antd';
@@ -24,21 +22,6 @@ type Props = {
 const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRole, connectProvider, contract, address, setUserRole }) => {
 
   const navigate = useNavigate()
-
-  useEffect(() => {
-    //Runs when the given parameter is updated
-    //direct the user to login page if adress changes
-
-   //@ts-ignore
-    const metaMaskProvider = window.ethereum
-    if (metaMaskProvider) {
-      metaMaskProvider.on("accountsChanged", () => {
-        connectProvider()
-        window.location.reload();
-
-      });
-    }
-  });
 
   const handleRegister = async () => {
     //splitting given input to get the name and surname

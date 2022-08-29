@@ -2,13 +2,6 @@ import { FC, useEffect } from 'react';
 import 'antd/dist/antd.min.css';
 import "../styles.css"
 import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Row,
   Popconfirm,
   notification,
   Table
@@ -35,7 +28,6 @@ import { ethers } from 'ethers';
   } 
   
   type Props = {
-    userRole: number;
     connectProvider: () => Promise<{
       role: any;
       address: string;
@@ -44,38 +36,12 @@ import { ethers } from 'ethers';
     contract: ethers.Contract | undefined;
   }
 
-  const ParentScreen: FC<Props> = ( {userRole, connectProvider, contract }) => {
+  const ParentScreen: FC<Props> = ( { connectProvider, contract }) => {
           
     const [currentScreen, setCurrentScreen] = useState<JSX.Element[]>([])
     let currentChildren: ChildDataType[] = []
 
     const navigate = useNavigate()
-    const redirectUser = async () => {
-
-      if (typeof contract === 'undefined') {
-        connectProvider().then((res) => {if (res?.role !== 1) {//redirect to login page if role is not parent
-          navigate("/")
-        }})
-
-      }
-  
-    }
-
-    useEffect(() => {
-      //direct the user to login page if adress changes
-  
-     //@ts-ignore
-      const metaMaskProvider = window.ethereum
-      if (metaMaskProvider) {
-        metaMaskProvider.on("accountsChanged", () => {
-          connectProvider()
-          navigate("/")
-          window.location.reload();
-  
-        });
-      }
-      redirectUser()
-    });
 
     const childColumns: ColumnsType<ChildDataType> = [
       {

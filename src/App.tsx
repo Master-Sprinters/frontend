@@ -6,9 +6,21 @@ import { ethers } from "ethers";
 import "./styles.css"
 import AdminScreen from './pages/AdminScreen';
 import ParentScreen from './pages/ParentScreen';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from './services/Contract';
 import LoginScreen from './pages/LoginScreen';
+
+const ProtectedRoute = ({
+  isAllowed,
+  redirectPath = '/',
+  children,
+}: any) => {
+  if (!isAllowed) {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return children ? children : <Outlet />;
+};
 
 const App: FC = () => {
 
@@ -27,14 +39,7 @@ const App: FC = () => {
       const signer = provider.getSigner()
       const address = await signer.getAddress()
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer)
-      
       const role = await contract.getRole(address)
-      
-
-      console.log(role)
-      setUserRole(role)
-      setCurrentAddress(address)
-      setCurrentContract(contract)
       return { role, address, contract }
     }
   }
@@ -43,6 +48,7 @@ const App: FC = () => {
     //Runs only on the first render
     connectProvider().then((res) => {
       setUserRole(res?.role)
+      console.log(res?.role)
       //@ts-ignore
       setCurrentAddress(res?.address)
       setCurrentContract(res?.contract)
@@ -50,13 +56,25 @@ const App: FC = () => {
     )
   }, []);
 
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    //direct the user to login page if adress changes
+    //@ts-ignore
+    const metaMaskProvider = window.ethereum
+    if (metaMaskProvider) {
+      metaMaskProvider.on("accountsChanged", () => {
+        navigate("/")
+        window.location.reload();
+      });
+    }
+  });
+
   return (
-    <BrowserRouter>
       <div className="App">
         <Routes>
           <Route path="/" element={<LoginScreen
-            userRole={userRole}
-            connectProvider={connectProvider} />} />
+            userRole={userRole} />} />
           <Route path="register-screen" element={<RegisterScreen
             name={name}
             setName={setName}
@@ -67,21 +85,27 @@ const App: FC = () => {
             contract={currentContract}
             address={currentAddress}
             setUserRole={setUserRole} />} />
-          <Route path="admin-screen" element={<AdminScreen
-            address={currentAddress}
+          <Route path="admin-screen" element={
+            <ProtectedRoute isAllowed={userRole === 0} redirectPath="/">
+              <AdminScreen
+                connectProvider={connectProvider}
+                contract={currentContract} />
+            </ProtectedRoute>
+          } />
+          <Route path="parent-screen" element={
+            <ProtectedRoute isAllowed={userRole === 1} redirectPath="/">
+              <ParentScreen
+                connectProvider={connectProvider}
+                contract={currentContract} /> </ProtectedRoute>}
+          />
+          <Route path="child-screen" element={
+          <ProtectedRoute isAllowed={userRole === 2} redirectPath="/">
+          <ChildScreen
             connectProvider={connectProvider}
-            contract={currentContract} />} />
-          <Route path="parent-screen" element={<ParentScreen
-            userRole={userRole}
-            connectProvider={connectProvider}
-            contract={currentContract} />} />
-          <Route path="child-screen" element={<ChildScreen
-            userRole={userRole}
-            connectProvider={connectProvider} 
-            contract={currentContract} />} />
+            contract={currentContract} />
+            </ProtectedRoute>} />
         </Routes>
       </div>
-    </BrowserRouter>
   );
 }
 
