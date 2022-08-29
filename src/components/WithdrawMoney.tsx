@@ -50,7 +50,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     const [budget, setBudget] = useState<string>(_budget)
 
     const [leftRadioClicked, setleftRadioClicked] = useState<boolean>(true)
-    const clickedRadioColor = "#40A9FF"
+    const clickedRadioColor = "white"
 
     const [newBudget, setNewBudget] = useState<number>(0);
     const [newDate, setNewDate] = useState<Date>(new Date(0))
@@ -285,13 +285,13 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                 <Row style={{ paddingTop: "10px" }}>
                                     <Radio.Group style={{ width: "140px"}}>
                                         <Radio.Button
-                                            style={{ color: "black", backgroundColor: leftRadioClicked ? clickedRadioColor : "", width: "70px", borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", borderColor:"white" }}
+                                            style={{ color: "black", backgroundColor: leftRadioClicked ? "#8AC926":clickedRadioColor, width: "70px",borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px", borderColor:"white", boxShadow:"unset" }}
                                             value="large" onClick={() => { setleftRadioClicked(true) }}
                                         >
                                             Ekle
                                         </Radio.Button>
                                         <Radio.Button
-                                            style={{ color: "black", backgroundColor: leftRadioClicked ? "":clickedRadioColor, width: "70px", borderTopRightRadius: "10px", borderBottomRightRadius: "10px", borderColor:"white" }}
+                                            style={{ color: "black", backgroundColor: leftRadioClicked ? clickedRadioColor:"#E45C3A", width: "70px", borderTopRightRadius: "10px", borderBottomRightRadius: "10px", borderColor:"white", boxShadow:"unset" }}
                                             value="large" onClick={() => { setleftRadioClicked(false) }}
                                         >
                                             Çıkar

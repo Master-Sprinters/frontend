@@ -9,7 +9,9 @@ import {
   Popconfirm,
   notification,
   Select,
+  Modal,
 } from 'antd';
+import { CheckCircleTwoTone } from '@ant-design/icons';
 import { useState } from 'react';
 import { FC } from 'react';
 import { ethers } from "ethers";
@@ -43,6 +45,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
   const [deliverDate, setDeliverDate] = useState<Date>(new Date(2000))
   const [deliverAmount, setDeliverAmount] = useState(0)
   var [submitUnit, setSubmitUnit] = useState<UnitType>("Ether")
+  const [confirmBool, setConfirmBool] = useState(false)
 
   const { Option } = Select;
 
@@ -58,6 +61,8 @@ const ChildAdd: FC<Props> = ({ contract }) => {
 
   const handleChildAdd = async () => {
 
+    setLoading(true);
+    
     if (typeof childName === 'undefined') {
       return
     }
@@ -88,17 +93,34 @@ const ChildAdd: FC<Props> = ({ contract }) => {
       contract.addChild(childAccount, childName, childSurname, (Math.floor(deliverDate?.getTime() / 1000)), { value: sentValue })
         .then(async (res: any) => {
           await res.wait()
+          handleCancel()
+          setLoading(false)
           displaySuccesNotification('bottomRight')
         })
         .catch((err: any) => {
           let result = `${err.reason}`.toString()
+          handleCancel()
+          setLoading(false)
           notification['error']({
             message: `Çocuk ekleme başarısız.`,
             description: result.substring(result.indexOf("'")+1, (result.length)-1)
           });
         })
     }
+
   }
+
+
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
 
   return (
     <>
@@ -107,28 +129,37 @@ const ChildAdd: FC<Props> = ({ contract }) => {
         <Row justify="center" align="middle">
           <Col span={16}>
             <Form
+              name="add-child-form"
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
               layout="vertical"
               size="middle"
               style={{textAlign:"center"}}
+              onFinish={showModal}
+              requiredMark={false}
             >
-              <Form.Item style={{paddingTop:"30px"}} label={<label className="child-add-label">Çocuğunuzun Adı:</label>}
+              <Form.Item name= "child-name" style={{paddingTop:"30px"}} label={<label className="child-add-label">Çocuğunuzun Adı:</label>}
                 rules={[{ required: true, message: 'Lütfen isim giriniz.' }]}
               >
                 <Input style={{ borderRadius:"10px"}} onChange={(e) => setChildName(e.target.value)} />
               </Form.Item>
-              <Form.Item label={<label className="child-add-label">Çocuğunuzun Soyadı:</label>}
+              
+              
+              <Form.Item name= "child-surname" label={<label className="child-add-label">Çocuğunuzun Soyadı:</label>}
                 rules={[{ required: true, message: 'Lütfen soyisim giriniz.' }]}
               >
                 <Input style={{ borderRadius:"10px"}} onChange={(e) => setChildSurname(e.target.value)} />
               </Form.Item>
-              <Form.Item label={<label className="child-add-label">Çocuğunuzun Hesap Adresi:</label>}
+              
+              
+              <Form.Item name= "child-id" label={<label className="child-add-label">Çocuğunuzun Hesap Adresi:</label>}
                 rules={[{ required: true, message: 'Lütfen adres giriniz.' }]}
               >
                 <Input style={{ borderRadius:"10px"}} onChange={(e) => setChildAccount(e.target.value)} />
               </Form.Item>
-              <Form.Item label={<label className="child-add-label">Aktarılacak Varlık Miktarı:</label>}
+              
+              
+              <Form.Item name= "child-amount" label={<label className="child-add-label">Aktarılacak Varlık Miktarı:</label>}
                 rules={[{ required: true, message: 'Lütfen devredilecek miktarı giriniz.' }]}>
                 <Col>
                   <Row>
@@ -139,17 +170,37 @@ const ChildAdd: FC<Props> = ({ contract }) => {
                   </Row>
                 </Col>
               </Form.Item>
-              <Form.Item label={<label className="child-add-label">Devir Tarihi:</label>}
+              
+              
+              <Form.Item name= "child-date" label={<label className="child-add-label">Devir Tarihi:</label>}
                 rules={[{ required: true, message: 'Geçerli bir devir tarihi giriniz.' }]}
               >
                 <DatePicker style={{width:"100%", borderRadius:"10px"}} onChange={(e) => setDeliverDate(e!.toDate())} />
               </Form.Item >
-              <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: "center", paddingTop: "5%" }}>
-                <Popconfirm placement="bottom" title={text} onConfirm={handleChildAdd} okText="Evet" cancelText="Hayır">
+              
+
+
+                <Form.Item name= "child-add-button" wrapperCol={{ span: 24 }} style={{ textAlign: "center", paddingTop: "5%" }}>
                   <Button id="child-add-btn" type="primary" htmlType="submit" >Kaydet</Button>
-                </Popconfirm>
-              </Form.Item>
+                </Form.Item>
             </Form>
+
+            <Modal
+              visible={visible}
+              title="Çocuğu eklemek istediğinize emin misiniz?"
+              onOk={handleChildAdd}
+              onCancel={handleCancel}
+              destroyOnClose={true}
+              bodyStyle={{height: '0px', margin: '0px', padding: '0px'}}
+              footer={[
+                <Button key="back" onClick={handleCancel}>
+                  İptal
+                </Button>,
+                <Button key="submit" type="primary" loading={loading} style={{backgroundColor: '#6A4C93', borderColor: 'white'}} onClick={handleChildAdd}>
+                  Tamam
+                </Button>,
+        ]}
+      ></Modal>
           </Col>
         </Row>
       </div>

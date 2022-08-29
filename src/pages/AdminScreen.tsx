@@ -174,7 +174,8 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
     }
 
     setData(currentParents)
-    displayParentTable(currentParents, currAmount)
+    //@ts-ignore
+    displayParentTable(currentParents, parseFloat(currAmount.toFixed(4)))
   }
 
   //assigns the given array parameter to current parents variable to be used
@@ -233,7 +234,8 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
   const getTotalAmount = async () => {
     if (typeof contract !== 'undefined') {
       var currAmount = await contract.seeContractBalance() / Math.pow(10,18)
-      setTotalAmount(currAmount)
+      
+      setTotalAmount(parseFloat(currAmount.toFixed(4)))
       return currAmount
     }
   }

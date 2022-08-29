@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import SmartContractPic from "../images/SmartContract.jpg"
 import LoginTop from "../images/LoginTop.svg"
 
+
 type Props = {
     userRole: number;
 }
@@ -16,7 +17,11 @@ const LoginScreen: FC<Props> = ({ userRole }) => {
     const navigate = useNavigate()
 
     const handleLogin = async () => {
-
+        //@ts-ignore
+        if(window.ethereum == undefined) {
+            window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=tr", "_blank")
+        }
+        
         switch (userRole) {
             case 0: { //admin
                 navigate("/admin-screen")
@@ -40,7 +45,7 @@ const LoginScreen: FC<Props> = ({ userRole }) => {
     const loginButton = [
 
         <Button key={10} id="login-btn" type="primary" htmlType="submit" onClick={handleLogin}>
-            Başla
+            BAŞLA
         </Button>
 
     ]
@@ -53,10 +58,8 @@ const LoginScreen: FC<Props> = ({ userRole }) => {
                     <div className="login-left">
                         <h5 className="login-left-title">MetaMask İle Bağlanın;</h5>
                         <p className="login-left-description">
-                            MetaMask, Ethereum blok zinciri ile etkileşim kurmak için
-                            kullanılan bir kripto para cüzdanıdır. Metamask cüzdan kullanmak
-                            için, Chrome veya Firefox gibi Chromium tabanlı bir web
-                            tarayıcısı gereklidir. Metamask cüzdan ile size özel tanımlanmış private
+                            <a href="https://metamask.io/" target='blank'>MetaMask</a>, Ethereum blok zinciri ile etkileşim kurmak için
+                            kullanılan bir kripto para cüzdanıdır. Metamask cüzdan ile size özel tanımlanmış private
                             key sayesinde sitemize tek tıkla kayıt yapabilirsiniz.
                             Sitemiz üzerinden MetaMask cüzdanınızdaki ETH ile smart
                             işlem oluşturabilirsiniz.

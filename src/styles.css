@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Noto+Sans:400,500,700,400italic,700italic&subset=latin,latin-ext);
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 
 .App {
     background-image: url("./images/SiteBackground.jpg");
@@ -88,6 +89,10 @@
     font-weight: 400;
     line-height: 46%;
     padding-top: 10%;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):before {
+    background-color: unset !important;
 }
 
 .register-description {
@@ -205,6 +210,7 @@
     margin-top: 10vh;
     border-radius: 30px;
     height: 60vh;
+    overflow: hidden;
 }
 
 #eth-legacy-logo {
@@ -230,20 +236,20 @@
     margin-top: 10vh;
     text-align: left;
     height: 60vh;
-    overflow-x: auto;
+    overflow: auto;
 }
 
 .login-left-title {
-    font: 'Roboto';
+    font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
-    font-size: 48px;
+    font-size: 46px;
     color: #000000;
     margin: 5%;
 }
 
 .login-left-description {
-    font-family: 'Noto Sans', 'Helvetica';
+    font-family: 'Noto Sans', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
@@ -258,7 +264,7 @@
     font-style: normal;
     font-weight: 400;
     font-size: 40px;
-    font: Roboto;
+    font-family: 'Roboto';
     color: #FFFFFF;
     background: #5C2CA4;
     border-radius: 30px;
