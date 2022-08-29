@@ -11,6 +11,8 @@ import {
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
+import EthSmall from "../images/Eth2.png"
+
 
 type Props = {
   connectProvider: () => Promise<{
@@ -112,12 +114,14 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
   const [currentScreen, setCurrentScreen] = useState<JSX.Element[]>(parentTable)
 
   //displays parent table by using the given parameter as dataSource
-  const displayParentTable = (tableData: ParentDataType[]) => {
+  const displayParentTable = (tableData: ParentDataType[], totAmount:number|undefined) => {
     setCurrentScreen(
       [
         <div key={1} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
           <div className="table-layout">
-            <h5 id="parent-table-title">Ebeveynler Tablosu</h5>
+            <h5 id="parent-table-title" style={{textAlign:"left", fontSize:"24px" ,paddingLeft:"10px", paddingBottom:"0px",display:"inline", float:"left"}}>Ebeveynler Tablosu</h5>
+            <img id="eth-small-logo" src={EthSmall} alt="eth"/>
+            <h5 id="parent-table-title" style={{display:"inline", fontSize:"24px", float:"right", paddingBottom:"0px"}} >Toplam Miktar: {totAmount} </h5>
             <Table
               rowKey='key'
               columns={columns}
@@ -156,7 +160,9 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
 
   //assigns the given array parameter to current parents variable to be used
   //on displayParentTable function 
-  const assginParents = (parentData: any) => {
+  const assginParents = async (parentData: any) => {
+
+    var currAmount:number|undefined = await getTotalAmount()
 
     for (let i = 0; i < parentData.length; i++) {
       const element: ParentDataType = {
@@ -168,7 +174,7 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
     }
 
     setData(currentParents)
-    displayParentTable(currentParents)
+    displayParentTable(currentParents, currAmount)
   }
 
   //assigns the given array parameter to current parents variable to be used
@@ -226,14 +232,16 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
 
   const getTotalAmount = async () => {
     if (typeof contract !== 'undefined') {
-      setTotalAmount(await contract.seeContractBalance() / Math.pow(10,18))
+      var currAmount = await contract.seeContractBalance() / Math.pow(10,18)
+      setTotalAmount(currAmount)
+      return currAmount
     }
   }
 
   useEffect(() => {
     //Runs only on the first render, calls parent table from backend
-    connectParents()
     getTotalAmount()
+    connectParents()
 
     console.log("total amount: " + totalAmount)
   }, []);

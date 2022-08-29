@@ -5,6 +5,8 @@ import { Col, Row } from 'antd';
 import "../styles.css"
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
+import EthMiras from "../images/EtherMiras.png"
+
 
 type Props = {
   name: string;
@@ -86,7 +88,7 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
       </Form>
       </Col>
       <Col className="register-right" span={12} >
-        <h5 className="register-welcome">Ether Miras'a Hoş Geldiniz</h5>
+      <div className="image-wrapper"><img style={{width:"18vw", top:"0", padding:"0", }} id="eth-legacy-logo" src={EthMiras} alt="eth"/></div>
         <p className="register-welcome-description"> Kişiselleştirilmiş, kullanımı kolay ve güvenli.</p>
         <p className="register-welcome-description"> Çocuklarının geleceğine yatırım yapmak için ve platformun tüm  fonksiyonlarına 
 erişmek için şimdi kaydol.</p>
