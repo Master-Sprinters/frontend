@@ -61,7 +61,7 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
         requiredMark={false}
       >
         <h5 className="register-header" >Kayıt Ol</h5>
-        <p className="register-description">Ether Miras’a hoş geldin, isim ve soyadını gir ve siteyi kullanmaya başla</p>
+        <p className="register-description">Ether Miras’a hoş geldiniz. İsim ve soyadınızı girin ve siteyi kullanmaya başlayın.</p>
         <Form.Item
           label={ 
             <p className="register-name-label">İsim</p>
