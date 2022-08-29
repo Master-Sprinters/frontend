@@ -164,7 +164,7 @@ import { ethers } from 'ethers';
     const menuItems: MenuItem[] = [
       getItem('Ana Menü', '1', <TeamOutlined />),
       getItem('Görüntüle/Değişiklik Yap', '2', <TeamOutlined />),
-      getItem('Çocuk Ekle Ve Para Yatır', '3', <TeamOutlined />),
+      getItem('Çocuk Ekle', '3', <TeamOutlined />),
       getItem('Çıkış', '4', < LogoutOutlined />),
     ]
 
