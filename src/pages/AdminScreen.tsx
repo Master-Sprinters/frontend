@@ -37,7 +37,7 @@ interface ChildDataType {
 
 const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
 
-  const [totalAmount, setTotalAmount] = useState("")
+  const [totalAmount, setTotalAmount] = useState<number>(0)
 
   const navigate = useNavigate()
 
@@ -165,24 +165,10 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
         accountID: parentData[i][0],
       }
       currentParents.push(element)
-
-      var currAmount: number = 0
-
-      connectProvider().then(async (res) => {
-        res?.contract.getChildren(parentData[i][0])
-          .then(async (childrenRes: any) => {
-            await childrenRes
-            for (let i = 0; i < childrenRes.length; i++) {
-              currAmount += Number(ethers.utils.formatEther(childrenRes[i][4]))
-            }
-            setTotalAmount(currAmount.toFixed(4).toString())
-          })
-      })
     }
 
     setData(currentParents)
     displayParentTable(currentParents)
-    console.log("total amount :" + totalAmount)
   }
 
   //assigns the given array parameter to current parents variable to be used
@@ -238,9 +224,18 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
     }
   }
 
+  const getTotalAmount = async () => {
+    if (typeof contract !== 'undefined') {
+      setTotalAmount(await contract.seeContractBalance() / Math.pow(10,18))
+    }
+  }
+
   useEffect(() => {
     //Runs only on the first render, calls parent table from backend
     connectParents()
+    getTotalAmount()
+
+    console.log("total amount: " + totalAmount)
   }, []);
 
   const items: MenuItem[] = [
@@ -253,6 +248,9 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
     console.log(e?.key)
     if (e?.key === '1') {
       connectParents()
+      getTotalAmount()
+
+      console.log("total amount: " + totalAmount)
     } else if (e?.key === '2') {
       navigate("/")
       //exit
