@@ -113,6 +113,7 @@ import { ethers } from 'ethers';
           <div className="table-layout">
           <h5 id="parent-table-title">Çocuklar Tablosu</h5>
           <Table
+            id='parent-child-table'
             rowKey='key'
             style={{ textAlign: "center" }}
             columns={childColumns}

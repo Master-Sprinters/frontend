@@ -114,35 +114,35 @@ const ChildAdd: FC<Props> = ({ contract }) => {
               style={{textAlign:"center"}}
             >
               <Form.Item style={{paddingTop:"30px"}} label={<label className="child-add-label">Çocuğunuzun Adı:</label>}
-                rules={[{ required: true, message: 'Çocuğunuzun adını giriniz...' }]}
+                rules={[{ required: true, message: 'Lütfen isim giriniz.' }]}
               >
-                <Input onChange={(e) => setChildName(e.target.value)} />
+                <Input style={{ borderRadius:"10px"}} onChange={(e) => setChildName(e.target.value)} />
               </Form.Item>
               <Form.Item label={<label className="child-add-label">Çocuğunuzun Soyadı:</label>}
-                rules={[{ required: true, message: 'Çocuğunuzun soy adını giriniz...' }]}
+                rules={[{ required: true, message: 'Lütfen soyisim giriniz.' }]}
               >
-                <Input onChange={(e) => setChildSurname(e.target.value)} />
+                <Input style={{ borderRadius:"10px"}} onChange={(e) => setChildSurname(e.target.value)} />
               </Form.Item>
               <Form.Item label={<label className="child-add-label">Çocuğunuzun Hesap Adresi:</label>}
-                rules={[{ required: true, message: 'Lütfen bilgisi giriniz...' }]}
+                rules={[{ required: true, message: 'Lütfen adres giriniz.' }]}
               >
-                <Input onChange={(e) => setChildAccount(e.target.value)} />
+                <Input style={{ borderRadius:"10px"}} onChange={(e) => setChildAccount(e.target.value)} />
               </Form.Item>
               <Form.Item label={<label className="child-add-label">Aktarılacak Varlık Miktarı:</label>}
-                rules={[{ required: true, message: 'Devredilecek miktarı giriniz' }]}>
+                rules={[{ required: true, message: 'Lütfen devredilecek miktarı giriniz.' }]}>
                 <Col>
                   <Row>
-                    <InputNumber onChange={(e) => setDeliverAmount(+e.valueOf())} />
-                    <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px" }} onChange={(unit: UnitType) => { setSubmitUnit(unit) }}>
+                    <InputNumber style={{ borderRadius:"10px"}} onChange={(e) => setDeliverAmount(+e.valueOf())} />
+                    <Select defaultValue={"Ether"} style={{ width: 100, paddingLeft: "10px",  }} onChange={(unit: UnitType) => { setSubmitUnit(unit) }}>
                       {units.map(unit => (<Option key={unit}>{unit}</Option>))}
                     </Select>
                   </Row>
                 </Col>
               </Form.Item>
               <Form.Item label={<label className="child-add-label">Devir Tarihi:</label>}
-                rules={[{ required: true, message: 'Geçerli bir devir tarihi giriniz' }]}
+                rules={[{ required: true, message: 'Geçerli bir devir tarihi giriniz.' }]}
               >
-                <DatePicker style={{width:"100%"}} onChange={(e) => setDeliverDate(e!.toDate())} />
+                <DatePicker style={{width:"100%", borderRadius:"10px"}} onChange={(e) => setDeliverDate(e!.toDate())} />
               </Form.Item >
               <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: "center", paddingTop: "5%" }}>
                 <Popconfirm placement="bottom" title={text} onConfirm={handleChildAdd} okText="Evet" cancelText="Hayır">
