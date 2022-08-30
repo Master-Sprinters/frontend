@@ -11,6 +11,8 @@ import { useState } from 'react';
 import {
   TeamOutlined,
   LogoutOutlined,
+  HomeOutlined,
+  EyeOutlined
 } from '@ant-design/icons';
 import ChildAdd from '../components/ChildAdd';
 import SiteLayout, { getItem, MenuItem } from '../components/SiteLayout';
@@ -162,8 +164,8 @@ import { ethers } from 'ethers';
     }, []);
 
     const menuItems: MenuItem[] = [
-      getItem('Ana Menü', '1', <TeamOutlined />),
-      getItem('Görüntüle/Değişiklik Yap', '2', <TeamOutlined />),
+      getItem('Ana Menü', '1', <HomeOutlined />),
+      getItem('Görüntüle/Değişiklik Yap', '2', <EyeOutlined />),
       getItem('Çocuk Ekle', '3', <TeamOutlined />),
       getItem('Çıkış', '4', < LogoutOutlined />),
     ]

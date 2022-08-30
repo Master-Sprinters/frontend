@@ -19,8 +19,8 @@ type Props = {
 const App = () => <AdvancedChart widgetProps={
 
     {
-        "width": window.screen.width*0.5,
-        "height": window.screen.height*0.5,
+        "width": window.screen.width*0.8,
+        "height": window.screen.height*0.4,
         "symbol": "BINANCE:ETHTRY",
         "interval": "5",
         "timezone": "Europe/Istanbul",
@@ -66,7 +66,7 @@ const MainMenu: FC<Props> = ({clientName, clientAddress, connectProvider}) => {
     return (
     <div key={1} className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
         <div className="main-layout" style={{paddingLeft: "30px", paddingTop: "10px"}}>
-            <Row id="welcome-name" className="parent-main-title">Hoş geldin {clientName} </Row>
+            <Row id="welcome-name" className="parent-main-title">HOŞ GELDİN, {clientName.toUpperCase()} </Row>
             <Row id="address" className="parent-main-id">
                 <img id="key-icon" src={Key} alt="key"/>
                 <div style={{paddingLeft: "10px"}}> {clientAddress} </div>
