@@ -106,9 +106,12 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                             })
                             .catch((err: any) => {
                                 let result = `${err.reason}`.toString()
+                                if (result.includes("insufficient funds")) {
+                                    result = "Hesapta yetersiz bakiye."
+                                }
                                 notification['error']({
                                   message: `Çocuk düzenleme başarısız.`,
-                                  description: result.substring(result.indexOf("'")+1, (result.length)-1)
+                                  description: result.substring(result.indexOf(":")+1, (result.length))
                                 });
                             })
                     }
@@ -126,7 +129,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                 let result = `${err.reason}`.toString()
                                 notification['error']({
                                   message: `Çocuk düzenleme başarısız.`,
-                                  description: result.substring(result.indexOf("'")+1, (result.length)-1)
+                                  description: result.substring(result.indexOf(":")+1, (result.length))
                                 });
                             })
                     }
@@ -151,7 +154,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
             let result = `${err.reason}`.toString()
             notification['error']({
               message: `Çocuk düzenleme başarısız.`,
-              description: result.substring(result.indexOf("'")+1, (result.length)-1)
+              description: result.substring(result.indexOf(":")+1, (result.length))
             });
         }
     }
@@ -174,7 +177,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                     let result = `${err.reason}`.toString()
                     notification['error']({
                       message: `Para çekme başarısız.`,
-                      description: result.substring(result.indexOf("'")+1, (result.length)-1)
+                      description: result.substring(result.indexOf(":")+1, (result.length))
                     });
                 })
             }

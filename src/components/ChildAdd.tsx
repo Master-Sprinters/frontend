@@ -103,7 +103,7 @@ const ChildAdd: FC<Props> = ({ contract }) => {
           setLoading(false)
           notification['error']({
             message: `Çocuk ekleme başarısız.`,
-            description: result.substring(result.indexOf("'")+1, (result.length)-1)
+            description: result.substring(result.indexOf(":")+1, (result.length))
           });
         })
     }
