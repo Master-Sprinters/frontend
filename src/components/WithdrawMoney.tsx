@@ -68,8 +68,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
     //button onClickmethods
     const onClickSave = async (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        console.log("save button clicked. New budget: " + newBudget)
-        console.log("curr budget: " + budget)
 
         var budgetChange: number = newBudget
         var isTry: boolean = false;
@@ -82,10 +80,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
         }
 
         var sentStr: string = budgetChange.toString()
-        console.log(sentStr)
         var sentValue: ethers.BigNumber = parseUnits(sentStr, submitUnit.toLowerCase())
-        console.log("new budget: " + sentValue + " - " + submitUnit)
-        console.log(Number(sentValue))
 
         if (submitUnit == "Ether" && isTry) {
             submitUnit = "TRY"
@@ -93,7 +88,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
         if (newBudget != 0) {
             if (window.confirm('Yeni bilgileri kaydetmek istediğinize emin misiniz?')) {
-                console.log("save button: accepted onclicksave")
 
                 if (leftRadioClicked) {
                     if (typeof contract !== 'undefined') {
@@ -102,7 +96,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                                 await res.wait()
                                 displaySaveSuccesNotification('bottomRight', 'Para yatırıldı.')
                                 const addition = (parseFloat(budget) + Number(sentValue) / Number(parseEther("1"))).toString()
-                                console.log("addition: " + (parseFloat(budget) + Number(sentValue)))
                                 setBudget(addition)
                             })
                             .catch((err: any) => {
@@ -137,13 +130,11 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
             }
             else {
-                console.log("save button: rejected")
             }
         }
 
         try {
             if(typeof contract !== 'undefined' && newDate.getTime() !== new Date(0).getTime()){
-                console.log("Changing date")
                 const resDate = await contract.changeReleaseDate(accId, (Math.floor(newDate?.getTime()/1000)))
                 const resCheckDate = await resDate.wait()
                 setTransferDate(new Date(newDate?.getTime()).toDateString())
@@ -161,10 +152,8 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
     }
 
     const onClickWithdraw = async () => {
-        console.log("save button clicked")
 
         if (window.confirm('Varlığı hesabınıza çekmek istediğinize emin misiniz?')) {
-            console.log("save button: accepted onclickwithdraw")
            
             //back-end com
             if (typeof contract !== 'undefined') {
@@ -185,7 +174,6 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
             }
         }
         else {
-            console.log("save button: rejected")
         }
 
 
@@ -193,12 +181,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
     //input onChange methods
     const onBudgetChange = (e: number) => {
-        console.log("new budget input: " + e)
         setNewBudget(e)
     }
 
     const onDateChange = (e: any, dateString: string) => {
-        console.log(dateString)
         setNewDate(new Date(dateString))
     }
 

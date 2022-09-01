@@ -176,7 +176,6 @@ import { ethers } from 'ethers';
         <WithdrawMoney key={3} _isParentAcc={true} _name={row.name} _accId={row.accountID} _transferDate={row.dueDate} _budget={row.amount} contract={contract}/>
       ]
       setCurrentScreen(currentEditContent)
-      console.log(row)
     }
 
     const displayMain = () => {
@@ -206,7 +205,6 @@ import { ethers } from 'ethers';
     }
 
     const handleCurrentContent = (e: MenuItem) => {
-      console.log(e?.key)
       if (e?.key === '1') {
         displayMain()
       } else if (e?.key === '2') {

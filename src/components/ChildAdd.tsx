@@ -18,6 +18,7 @@ import { ethers } from "ethers";
 import 'antd/dist/antd.min.css';
 import "../styles.css"
 import type { NotificationPlacement } from 'antd/es/notification';
+import { displayErrorMessage } from '../functions/ErrorMessage';
 
 const ethPrice = require('eth-price');
 
@@ -72,8 +73,6 @@ const ChildAdd: FC<Props> = ({ contract }) => {
 
     if (submitUnit == "TRY") {
       isTry = true
-      console.log("try içindeyim")
-      console.log(await ethPrice('try'))
       // alınan string'i parse'lar, 27000 gibi bir değer kalır. sonra deliverAmount / 27000 değeri işlemi yapılır
       budgetChange = deliverAmount / parseFloat((await ethPrice('try')).toString().replace("TRY: ", "").replace(",", "."))
       submitUnit = "Ether"
@@ -81,8 +80,6 @@ const ChildAdd: FC<Props> = ({ contract }) => {
 
     var sentStr: string = budgetChange.toString()
     var sentValue: ethers.BigNumber = ethers.utils.parseUnits(sentStr, submitUnit.toLowerCase())
-    console.log("sent unit: " + submitUnit)
-    console.log("sent value: " + sentValue + " wei")
 
     if (submitUnit == "Ether" && isTry) {
       submitUnit = "TRY"
@@ -101,9 +98,10 @@ const ChildAdd: FC<Props> = ({ contract }) => {
           let result = `${err.reason}`.toString()
           handleCancel()
           setLoading(false)
+          const desc = displayErrorMessage(result.substring(result.indexOf(":")+1, (result.length)))
           notification['error']({
             message: `Çocuk ekleme başarısız.`,
-            description: result.substring(result.indexOf(":")+1, (result.length))
+            description: desc
           });
         })
     }

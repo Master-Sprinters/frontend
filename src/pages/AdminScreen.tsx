@@ -194,7 +194,6 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
       if (element.accountID.toString() !== ethers.constants.AddressZero) {
         currentChildren.push(element)
       }
-      console.log(element.dueDate)
     }
     //setData(currentParents)
     displayChildTable(currentChildren)
@@ -245,7 +244,6 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
     getTotalAmount()
     connectParents()
 
-    console.log("total amount: " + totalAmount)
   }, []);
 
   const items: MenuItem[] = [
@@ -255,12 +253,10 @@ const AdminScreen: FC<Props> = ({ connectProvider, contract }) => {
 
   //displays different content according to the selected item on sidebar
   const handleCurrentScreen = (e: MenuItem) => {
-    console.log(e?.key)
     if (e?.key === '1') {
       connectParents()
       getTotalAmount()
 
-      console.log("total amount: " + totalAmount)
     } else if (e?.key === '2') {
       navigate("/")
       //exit

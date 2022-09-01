@@ -48,7 +48,6 @@ const App: FC = () => {
     //Runs only on the first render
     connectProvider().then((res) => {
       setUserRole(res?.role)
-      console.log(res?.role)
       //@ts-ignore
       setCurrentAddress(res?.address)
       setCurrentContract(res?.contract)

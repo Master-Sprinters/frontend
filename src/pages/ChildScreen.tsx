@@ -28,7 +28,6 @@ const ChildScreen: FC<Props> = ({ connectProvider, contract }) => {
         if (typeof contract !== 'undefined') {
             const res = await contract.getChild()
             
-            console.log(res)
             setRetrieved(true)
             setName(res.name.concat(" ").concat(res.surname));
             setAccId(res._address)

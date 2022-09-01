@@ -32,14 +32,11 @@ const RegisterScreen: FC<Props> = ({ surname, setSurname, name, setName, userRol
       message.error('Lütfen geçerli bir isim-soyisim giriniz...')
       return
     }
-    console.log(name, surname)
     if(typeof contract !== 'undefined'){
       const res = await contract.addParent(address, name, surname)
       const res2 = await res.wait()
-      console.log(res2)
       const role = await contract.getRole(address)
       setUserRole(role)
-      console.log(userRole)
       if(role === 1){
         navigate("/parent-screen")
       }
