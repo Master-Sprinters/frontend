@@ -6,6 +6,7 @@ import "../styles.css"
 import { ethers } from "ethers";
 import notification, { NotificationPlacement } from "antd/lib/notification";
 import { parseUnits, parseEther } from "ethers/lib/utils";
+import { displayErrorMessage } from "../functions/ErrorMessage";
 
 const ethPrice = require('eth-price');
 
@@ -106,12 +107,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                             })
                             .catch((err: any) => {
                                 let result = `${err.reason}`.toString()
-                                if (result.includes("insufficient funds")) {
-                                    result = "Hesapta yetersiz bakiye."
-                                }
+                                const desc = displayErrorMessage(result.substring(result.indexOf(":")+1, (result.length)))
                                 notification['error']({
                                   message: `Çocuk düzenleme başarısız.`,
-                                  description: result.substring(result.indexOf(":")+1, (result.length))
+                                  description: desc
                                 });
                             })
                     }
@@ -127,9 +126,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                             })
                             .catch((err: any) => {
                                 let result = `${err.reason}`.toString()
+                                const desc = displayErrorMessage(result.substring(result.indexOf(":")+1, (result.length)))
                                 notification['error']({
                                   message: `Çocuk düzenleme başarısız.`,
-                                  description: result.substring(result.indexOf(":")+1, (result.length))
+                                  description: desc
                                 });
                             })
                     }
@@ -152,9 +152,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
         } catch (err: any) {
             let result = `${err.reason}`.toString()
+            const desc = displayErrorMessage(result.substring(result.indexOf(":")+1, (result.length)))
             notification['error']({
               message: `Çocuk düzenleme başarısız.`,
-              description: result.substring(result.indexOf(":")+1, (result.length))
+              description: desc
             });
         }
     }
@@ -175,9 +176,10 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
                 })
                 .catch((err: any) => {
                     let result = `${err.reason}`.toString()
+                    const desc = displayErrorMessage(result.substring(result.indexOf(":")+1, (result.length)))
                     notification['error']({
                       message: `Para çekme başarısız.`,
-                      description: result.substring(result.indexOf(":")+1, (result.length))
+                      description: desc
                     });
                 })
             }
