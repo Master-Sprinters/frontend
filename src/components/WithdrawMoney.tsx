@@ -235,7 +235,7 @@ const WithdrawMoney: FunctionComponent<Params> = ({ _name, _accId, _transferDate
 
     //desing
     return (
-        <div>
+        <div style={{height:"100vh"}}>
             {getTitle()}
             <div className="edit-form">
             <Form {...formLayout}
