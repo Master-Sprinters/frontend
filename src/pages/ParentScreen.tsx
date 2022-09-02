@@ -190,7 +190,7 @@ import { ethers } from 'ethers';
         contract.getParent()
           .then(async (res: any) => {
             const setMainMenu = [
-              <MainMenu clientName={res.name} clientAddress={res._address} connectProvider={connectProvider}/>
+              <MainMenu key={15} clientName={res.name} clientAddress={res._address} connectProvider={connectProvider}/>
             ]
             
             setCurrentScreen(setMainMenu)
